@@ -1,25 +1,29 @@
-const models = require("../models");
-const LogbookEntry = models.logbookEntry;
+const LogbookEntry = require("../models/logbookEntry.model");
 
 // POST
 exports.create = (req, res) => {
-    if (!req.body.content) {
-        res.status(400).send({ message: "Content can not be empty!" });
+    if (!req.body.pilotName) {
+        res.status(400).send({
+            message: "Logbook entry requires a pilot's name.",
+        });
         return;
     }
 
-    const parsedDepTimeZulu = Date.parse(req.body.depTimeZulu);
-    const parsedArrTimeZulu = Date.parse(req.body.arrTimeZulu);
-    const flightTimeHours =
-        (parsedArrTimeZulu.getTime() - parsedDepTimeZulu.getTime()) / 3600000;
+    // const parsedDepTimeZulu = Date.parse(req.body.depTimeZulu);
+    // const parsedArrTimeZulu = Date.parse(req.body.arrTimeZulu);
+    // const flightTimeHours =
+    //     (parsedArrTimeZulu.getTime() - parsedDepTimeZulu.getTime()) / 3600000;
 
     const logbookEntry = new LogbookEntry({
         pilotName: req.body.pilotName,
         depICAO: req.body.depICAO,
         arrICAO: req.body.arrICAO,
-        depTimeZulu: parsedDepTimeZulu,
-        arrTimeZulu: parsedArrTimeZulu,
-        flightTime: flightTimeHours,
+        depTimeZulu: req.body.depTimeZulu,
+        arrTimeZulu: req.body.arrTimeZulu,
+        flightTime: req.body.flightTime,
+        // depTimeZulu: parsedDepTimeZulu,
+        // arrTimeZulu: parsedArrTimeZulu,
+        // flightTime: flightTimeHours,
     });
 
     logbookEntry
@@ -33,5 +37,43 @@ exports.create = (req, res) => {
                     err.message ||
                     "An error occured while saving the logbook entry.",
             });
+        });
+};
+
+// GET
+exports.findAll = (req, res) => {
+    LogbookEntry.find()
+        .then(data => {
+            res.json(data);
+        })
+        .catch(err => {
+            res.status(500).json(
+                `An error occured while fetching the logbook entries ${err}`
+            );
+        });
+};
+
+// PUT
+exports.update = (req, res) => {
+    if (!req.body) {
+        return res
+            .status(400)
+            .json("Data to update the logbook entry can't be empty!");
+    }
+
+    const id = req.params.id;
+
+    LogbookEntry.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).json({
+                    message: `Cannot update a logbook entry with id=${id}.`,
+                });
+            } else {
+                res.json("Logbook entry has been updated.");
+            }
+        })
+        .catch(err => {
+            res.status(500).json(`Error ${err}`);
         });
 };

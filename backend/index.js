@@ -13,7 +13,7 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-const db = require("./backend/models");
+const db = require("./models");
 db.mongoose
     .connect(db.url, {
         useNewUrlParser: true,
@@ -29,7 +29,7 @@ db.mongoose
         process.exit();
     });
 
-const logbook = require("./backend/routes/logbook");
+const logbook = require("./routes/logbook");
 app.use("/api/logbook", logbook);
 
 const PORT = process.env.PORT || 3000;
