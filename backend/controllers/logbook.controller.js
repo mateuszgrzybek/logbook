@@ -63,3 +63,27 @@ exports.update = (req, res) => {
             res.status(500).json(`Error ${err}`);
         });
 };
+
+// DELETE
+
+exports.delete = (req, res) => {
+    const id = req.params.id;
+
+    LogbookEntry.findByIdAndRemove(id)
+        .then(data => {
+            if (!data) {
+                res.status(404).json({
+                    message: `Cannot delete logbook entry with id=${id}. Make sure an entry with that id exists.`,
+                });
+            } else {
+                res.json({
+                    message: "Logbook entry has been removed.",
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: `Couldn't delete logbook entry. Error: ${err}`,
+            });
+        });
+};

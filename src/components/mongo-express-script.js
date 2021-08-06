@@ -56,3 +56,16 @@ export const getAllEntries = async () => {
     const response = await axios(request);
     return response;
 };
+
+export const deleteEntry = async item => {
+    let request = {
+        url: "http://localhost:3000/api/logbook/" + item._id, // domain should be used here in prod build
+        method: "delete",
+        headers: {
+            "Content-type": "application/json",
+        },
+    };
+
+    const response = await axios(request);
+    return response;
+};

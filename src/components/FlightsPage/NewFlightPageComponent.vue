@@ -17,7 +17,7 @@
                     </div>
                     <div class="mb-5">
                         <label for="depTimeZulu" class="title is-6 has-text-white">Departure time</label>
-                        <DatePicker v-model="depTimeZulu" mode="dateTime" color="blue" is-dark>
+                        <DatePicker v-model="depTimeZulu" mode="dateTime" color="blue" is-dark is24hr>
                             <template v-slot="{ inputValue, togglePopover }">
                                 <div class="field has-addons">
                                     <div class="control">
@@ -36,7 +36,7 @@
                     </div>
                     <div class="mb-5">
                         <label for="arrTimeZulu" class="title is-6 has-text-white">Arrival time</label>
-                        <DatePicker v-model="arrTimeZulu" mode="dateTime" color="blue" is-dark>
+                        <DatePicker v-model="arrTimeZulu" mode="dateTime" color="blue" is-dark is24hr>
                             <template v-slot="{ inputValue, togglePopover }">
                                 <div class="field has-addons">
                                     <div class="control">

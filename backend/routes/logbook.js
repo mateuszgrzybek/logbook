@@ -14,4 +14,7 @@ router.post("/", logbook.create);
 // Update log
 router.put("/:id", logbook.update);
 
+// Delete log
+router.delete("/:id", logbook.delete);
+
 module.exports = router;
