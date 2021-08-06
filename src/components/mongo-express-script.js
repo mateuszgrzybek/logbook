@@ -5,8 +5,8 @@ export const createNewEntry = async item => {
         pilotName: item.pilotName, // authorized user should be used here in future prod build
         depICAO: item.depICAO,
         arrICAO: item.arrICAO,
-        depTimeZulu: JSON.stringify(item.depTimeZulu),
-        arrTimeZulu: JSON.stringify(item.arrTimeZulu),
+        depTimeZulu: item.depTimeZulu,
+        arrTimeZulu: item.arrTimeZulu,
         flightTime: JSON.stringify(item.flightTime),
     };
     let request = {

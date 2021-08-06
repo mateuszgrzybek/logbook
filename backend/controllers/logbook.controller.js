@@ -9,11 +9,6 @@ exports.create = (req, res) => {
         return;
     }
 
-    // const parsedDepTimeZulu = Date.parse(req.body.depTimeZulu);
-    // const parsedArrTimeZulu = Date.parse(req.body.arrTimeZulu);
-    // const flightTimeHours =
-    //     (parsedArrTimeZulu.getTime() - parsedDepTimeZulu.getTime()) / 3600000;
-
     const logbookEntry = new LogbookEntry({
         pilotName: req.body.pilotName,
         depICAO: req.body.depICAO,
@@ -21,9 +16,6 @@ exports.create = (req, res) => {
         depTimeZulu: req.body.depTimeZulu,
         arrTimeZulu: req.body.arrTimeZulu,
         flightTime: req.body.flightTime,
-        // depTimeZulu: parsedDepTimeZulu,
-        // arrTimeZulu: parsedArrTimeZulu,
-        // flightTime: flightTimeHours,
     });
 
     logbookEntry
@@ -33,9 +25,7 @@ exports.create = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message ||
-                    "An error occured while saving the logbook entry.",
+                message: err.message || "An error occured while saving the logbook entry.",
             });
         });
 };
@@ -47,18 +37,14 @@ exports.findAll = (req, res) => {
             res.json(data);
         })
         .catch(err => {
-            res.status(500).json(
-                `An error occured while fetching the logbook entries ${err}`
-            );
+            res.status(500).json(`An error occured while fetching the logbook entries ${err}`);
         });
 };
 
 // PUT
 exports.update = (req, res) => {
     if (!req.body) {
-        return res
-            .status(400)
-            .json("Data to update the logbook entry can't be empty!");
+        return res.status(400).json("Data to update the logbook entry can't be empty!");
     }
 
     const id = req.params.id;

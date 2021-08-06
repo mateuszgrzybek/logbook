@@ -1,30 +1,5 @@
 <template>
     <section class="hero is-info is-fullheight">
-        <Slideshow></Slideshow>
-        <div class="hero-head">
-            <nav class="navbar">
-                <div class="container">
-                    <div class="navbar-brand">
-                        <a class="navbar-item" href="../">
-                            Logbook
-                        </a>
-                        <span class="navbar-burger burger" data-target="navbarMenu">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </span>
-                    </div>
-                    <div id="navbarMenu" class="navbar-menu">
-                        <div class="navbar-end">
-                            <NavButton btnText="Home" iconClass="fa-home"></NavButton>
-                            <NavButton btnText="Flights" iconClass="fa-plane-departure"></NavButton>
-                            <NavButton btnText="Fleet" iconClass="fa-plane"></NavButton>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-
         <div class="hero-body">
             <div class="container has-text-centered">
                 <div class="column is-6 is-offset-3">
@@ -42,21 +17,15 @@
 </template>
 
 <script>
-import NavButton from "./NavButtonComponent.vue";
-import Slideshow from "./SlideshowComponent.vue";
-
 export default {
     name: "LandingPage",
-    components: {
-        NavButton,
-        Slideshow,
-    },
+    components: {},
 };
 </script>
 
 <style lang="scss" scoped>
 .hero.is-info {
-    background-color: #808080;
+    background-color: transparent;
 }
 .hero .nav,
 .hero.is-success .nav {
