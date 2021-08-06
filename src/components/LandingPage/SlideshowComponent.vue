@@ -28,6 +28,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.slideshow {
+    background-color: #808080;
+}
 .slideshow,
 .slideshow:after {
     position: fixed;
