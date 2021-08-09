@@ -8,6 +8,14 @@
                         <input name="pilotName" class="input" v-model="pilotName" />
                     </div>
                     <div class="mb-5">
+                        <label for="aircraftICAO" class="title is-6 has-text-white">Aircraft ICAO</label>
+                        <input name="aircraftICAO" class="input" v-model="aircraftICAO" />
+                    </div>
+                    <div class="mb-5">
+                        <label for="aircraftRegistration" class="title is-6 has-text-white">Aircraft registration</label>
+                        <input name="aircraftRegistration" class="input" v-model="aircraftRegistration" />
+                    </div>
+                    <div class="mb-5">
                         <label for="depICAO" class="title is-6 has-text-white">Departure airport ICAO</label>
                         <input name="depICAO" class="input" v-model="depICAO" />
                     </div>
@@ -89,6 +97,8 @@ export default {
             depTimeZulu: new Date(),
             arrTimeZulu: new Date(),
             flightTime: 0,
+            aircraftICAO: "",
+            aircraftRegistration: "",
         };
     },
     methods: {
@@ -100,6 +110,8 @@ export default {
                 depTimeZulu: this.depTimeZulu.toISOString(),
                 arrTimeZulu: this.arrTimeZulu.toISOString(),
                 flightTime: this.flightTime,
+                aircraftICAO: this.aircraftICAO,
+                aircraftRegistration: this.aircraftRegistration,
             };
 
             createNewEntry(newEntry);
