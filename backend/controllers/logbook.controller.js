@@ -18,6 +18,7 @@ exports.create = (req, res) => {
         flightTime: req.body.flightTime,
         aircraftICAO: req.body.aircraftICAO,
         aircraftRegistration: req.body.aircraftRegistration,
+        planeSpottersPhotoSource: req.body.planeSpottersPhotoSource,
     });
 
     logbookEntry

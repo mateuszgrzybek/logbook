@@ -12,6 +12,7 @@ const logbookEntrySchema = new Schema(
         flightTime: Number,
         aircraftICAO: String,
         aircraftRegistration: String,
+        planeSpottersPhotoSource: String,
     },
     { timestamps: true }
 );

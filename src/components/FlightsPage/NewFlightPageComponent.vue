@@ -83,6 +83,7 @@
 import { DatePicker } from "v-calendar";
 import { createNewEntry } from "../mongo-express-script";
 import router from "../../router";
+import axios from "axios";
 
 export default {
     name: "NewFlight",
@@ -99,23 +100,30 @@ export default {
             flightTime: 0,
             aircraftICAO: "",
             aircraftRegistration: "",
+            planeSpottersPhotoSource: "",
         };
     },
     methods: {
         createNewEntry() {
-            const newEntry = {
-                pilotName: this.pilotName,
-                depICAO: this.depICAO,
-                arrICAO: this.arrICAO,
-                depTimeZulu: this.depTimeZulu.toISOString(),
-                arrTimeZulu: this.arrTimeZulu.toISOString(),
-                flightTime: this.flightTime,
-                aircraftICAO: this.aircraftICAO,
-                aircraftRegistration: this.aircraftRegistration,
-            };
+            axios.get(`https://api.planespotters.net/pub/photos/reg/${this.aircraftRegistration}`).then(response => {
+                const photos = response.data.photos;
+                this.planeSpottersPhotoSource = photos.length === 0 ? "" : photos[0].thumbnail_large.src;
 
-            createNewEntry(newEntry);
-            router.go(-1);
+                const newEntry = {
+                    pilotName: this.pilotName,
+                    depICAO: this.depICAO,
+                    arrICAO: this.arrICAO,
+                    depTimeZulu: this.depTimeZulu.toISOString(),
+                    arrTimeZulu: this.arrTimeZulu.toISOString(),
+                    flightTime: this.flightTime,
+                    aircraftICAO: this.aircraftICAO,
+                    aircraftRegistration: this.aircraftRegistration,
+                    planeSpottersPhotoSource: this.planeSpottersPhotoSource,
+                };
+
+                createNewEntry(newEntry);
+                router.go(-1);
+            });
         },
         updateFlightTime() {
             let difference = Math.abs(this.arrTimeZulu.getTime() - this.depTimeZulu.getTime()) / 1000 / 3600;

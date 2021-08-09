@@ -10,6 +10,7 @@ export const createNewEntry = async item => {
         flightTime: JSON.stringify(item.flightTime),
         aircraftICAO: item.aircraftICAO,
         aircraftRegistration: item.aircraftRegistration,
+        planeSpottersPhotoSource: item.planeSpottersPhotoSource,
     };
     let request = {
         url: "http://localhost:3000/api/logbook", // domain should be used here in prod build
@@ -34,6 +35,7 @@ export const updateEntry = async item => {
         flightTime: JSON.stringify(item.flightTime),
         aircraftICAO: item.aircraftICAO,
         aircraftRegistration: item.aircraftRegistration,
+        planeSpottersPhotoSource: item.planeSpottersPhotoSource,
     };
     let request = {
         url: "http://localhost:3000/api/logbook/" + item._id, // domain should be used here in prod build
