@@ -6,14 +6,20 @@
             </figure>
         </div>
         <div class="card-content">
-            <p class="subtitle">Pilot's name: {{ logbookEntry.pilotName }}</p>
-            <p class="subtitle">Aircraft ICAO: {{ logbookEntry.aircraftICAO }}</p>
-            <p class="subtitle">Aircraft registration: {{ logbookEntry.aircraftRegistration }}</p>
-            <p class="subtitle">Departure airport ICAO: {{ logbookEntry.depICAO }}</p>
-            <p class="subtitle">Arrival airport ICAO: {{ logbookEntry.arrICAO }}</p>
-            <p class="subtitle">Departure time: {{ logbookEntry.depTimeZulu }}</p>
-            <p class="subtitle">Arrival time: {{ logbookEntry.arrTimeZulu }}</p>
-            <p class="subtitle">Flight time: {{ logbookEntry.flightTime }}</p>
+            <p class="is-size-6 mb-3"><span class="has-text-weight-bold is-size-6">Pilot's name: </span>{{ logbookEntry.pilotName }}</p>
+            <p class="is-size-6 mb-3"><span class="has-text-weight-bold is-size-6">Aircraft ICAO: </span>{{ logbookEntry.aircraftICAO }}</p>
+            <p class="is-size-6 mb-3">
+                <span class="has-text-weight-bold is-size-6">Aircraft registration: </span>{{ logbookEntry.aircraftRegistration }}
+            </p>
+            <p class="is-size-6 mb-3">
+                <span class="has-text-weight-bold is-size-6">Departure airport ICAO: </span>{{ logbookEntry.depICAO }}
+            </p>
+            <p class="is-size-6 mb-3">
+                <span class="has-text-weight-bold is-size-6">Arrival airport ICAO: </span>{{ logbookEntry.arrICAO }}
+            </p>
+            <p class="is-size-6 mb-3"><span class="has-text-weight-bold is-size-6">Departure time: </span>{{ logbookEntry.depTimeZulu }}</p>
+            <p class="is-size-6 mb-3"><span class="has-text-weight-bold is-size-6">Arrival time: </span>{{ logbookEntry.arrTimeZulu }}</p>
+            <p class="is-size-6"><span class="has-text-weight-bold is-size-6">Flight time: </span>{{ logbookEntry.flightTime }}</p>
         </div>
         <footer class="card-footer">
             <a type="button" class="card-footer-item" v-on:click="deleteEntry(logbookEntry)">

@@ -1,5 +1,5 @@
 <template>
-    <section class="section is-info is-fullheight">
+    <section class="section is-info is-fullheight-with-navbar">
         <div class="container">
             <h1 class="title mb-6 has-text-white">
                 Logbook entries
@@ -50,4 +50,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+section {
+    height: calc(100vh - 3.25rem);
+}
+</style>
