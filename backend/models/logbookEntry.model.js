@@ -10,6 +10,9 @@ const logbookEntrySchema = new Schema(
         depTimeZulu: Date,
         arrTimeZulu: Date,
         flightTime: Number,
+        aircraftICAO: String,
+        aircraftRegistration: String,
+        planeSpottersPhotoSource: String,
     },
     { timestamps: true }
 );

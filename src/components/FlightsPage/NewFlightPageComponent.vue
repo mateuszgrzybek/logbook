@@ -8,6 +8,14 @@
                         <input name="pilotName" class="input" v-model="pilotName" />
                     </div>
                     <div class="mb-5">
+                        <label for="aircraftICAO" class="title is-6 has-text-white">Aircraft ICAO</label>
+                        <input name="aircraftICAO" class="input" v-model="aircraftICAO" />
+                    </div>
+                    <div class="mb-5">
+                        <label for="aircraftRegistration" class="title is-6 has-text-white">Aircraft registration</label>
+                        <input name="aircraftRegistration" class="input" v-model="aircraftRegistration" />
+                    </div>
+                    <div class="mb-5">
                         <label for="depICAO" class="title is-6 has-text-white">Departure airport ICAO</label>
                         <input name="depICAO" class="input" v-model="depICAO" />
                     </div>
@@ -75,6 +83,7 @@
 import { DatePicker } from "v-calendar";
 import { createNewEntry } from "../mongo-express-script";
 import router from "../../router";
+import axios from "axios";
 
 export default {
     name: "NewFlight",
@@ -89,21 +98,32 @@ export default {
             depTimeZulu: new Date(),
             arrTimeZulu: new Date(),
             flightTime: 0,
+            aircraftICAO: "",
+            aircraftRegistration: "",
+            planeSpottersPhotoSource: "",
         };
     },
     methods: {
         createNewEntry() {
-            const newEntry = {
-                pilotName: this.pilotName,
-                depICAO: this.depICAO,
-                arrICAO: this.arrICAO,
-                depTimeZulu: this.depTimeZulu.toISOString(),
-                arrTimeZulu: this.arrTimeZulu.toISOString(),
-                flightTime: this.flightTime,
-            };
+            axios.get(`https://api.planespotters.net/pub/photos/reg/${this.aircraftRegistration}`).then(response => {
+                const photos = response.data.photos;
+                this.planeSpottersPhotoSource = photos.length === 0 ? "" : photos[0].thumbnail_large.src;
 
-            createNewEntry(newEntry);
-            router.go(-1);
+                const newEntry = {
+                    pilotName: this.pilotName,
+                    depICAO: this.depICAO,
+                    arrICAO: this.arrICAO,
+                    depTimeZulu: this.depTimeZulu.toISOString(),
+                    arrTimeZulu: this.arrTimeZulu.toISOString(),
+                    flightTime: this.flightTime,
+                    aircraftICAO: this.aircraftICAO,
+                    aircraftRegistration: this.aircraftRegistration,
+                    planeSpottersPhotoSource: this.planeSpottersPhotoSource,
+                };
+
+                createNewEntry(newEntry);
+                router.go(-1);
+            });
         },
         updateFlightTime() {
             let difference = Math.abs(this.arrTimeZulu.getTime() - this.depTimeZulu.getTime()) / 1000 / 3600;

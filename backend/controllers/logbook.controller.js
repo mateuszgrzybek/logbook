@@ -16,6 +16,9 @@ exports.create = (req, res) => {
         depTimeZulu: req.body.depTimeZulu,
         arrTimeZulu: req.body.arrTimeZulu,
         flightTime: req.body.flightTime,
+        aircraftICAO: req.body.aircraftICAO,
+        aircraftRegistration: req.body.aircraftRegistration,
+        planeSpottersPhotoSource: req.body.planeSpottersPhotoSource,
     });
 
     logbookEntry
@@ -65,7 +68,6 @@ exports.update = (req, res) => {
 };
 
 // DELETE
-
 exports.delete = (req, res) => {
     const id = req.params.id;
 

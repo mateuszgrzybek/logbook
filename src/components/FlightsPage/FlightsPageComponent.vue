@@ -1,37 +1,21 @@
 <template>
-    <section class="section is-info is-fullheight">
+    <section class="section is-info is-fullheight-with-navbar">
         <div class="container">
-            <div class="column is-5">
-                <h1 class="title mb-6">
-                    Logbook entries
-                </h1>
-                <h2 class="subtitle">
-                    Here you can find all your logbook entries.
-                </h2>
-                <router-link class="button is-white is-outlined mb-5" :to="{ name: 'NewFlight' }">
-                    <span class="icon">
-                        <i class="fa fa-plus"></i>
-                    </span>
-                    <span>Log a new flight</span>
-                </router-link>
-                <div v-for="logbookEntry in logbookEntries" :key="logbookEntry._id" class="mb-6">
-                    <div class="columns is-align-items-center">
-                        <div class="column is-10 mr-3">
-                            <p>Pilot's name: {{ logbookEntry.pilotName }}</p>
-                            <p>Departure airport ICAO: {{ logbookEntry.depICAO }}</p>
-                            <p>Arrival airport ICAO: {{ logbookEntry.arrICAO }}</p>
-                            <p>Departure time: {{ logbookEntry.depTimeZulu }}</p>
-                            <p>Arrival time: {{ logbookEntry.arrTimeZulu }}</p>
-                            <p>Flight time: {{ logbookEntry.flightTime }}</p>
-                        </div>
-                        <div class="column is-2">
-                            <button type="button" class="button is-white is-outlined" v-on:click="deleteEntry(logbookEntry)">
-                                <span class="icon">
-                                    <i class="fa fa-trash"></i>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
+            <h1 class="title mb-6 has-text-white">
+                Logbook entries
+            </h1>
+            <h2 class="subtitle has-text-white">
+                Here you can find all your logbook entries.
+            </h2>
+            <router-link class="button is-white is-outlined mb-5" :to="{ name: 'NewFlight' }">
+                <span class="icon">
+                    <i class="fa fa-plus"></i>
+                </span>
+                <span>Log a new flight</span>
+            </router-link>
+            <div class="columns is-multiline">
+                <div v-for="logbookEntry in logbookEntries" :key="logbookEntry._id" class="column is-one-third mb-6">
+                    <FlightCard :logbookEntry="logbookEntry" @EntryDeleted="updateEntriesArray"></FlightCard>
                 </div>
             </div>
         </div>
@@ -39,7 +23,8 @@
 </template>
 
 <script>
-import { getAllEntries, deleteEntry } from "../mongo-express-script";
+import { getAllEntries } from "../mongo-express-script";
+import FlightCard from "./FlightCardComponent.vue";
 
 export default {
     name: "FlightsPage",
@@ -48,6 +33,9 @@ export default {
             logbookEntries: [],
         };
     },
+    components: {
+        FlightCard,
+    },
     mounted() {
         getAllEntries().then(response => (this.logbookEntries = response.data));
     },
@@ -55,25 +43,15 @@ export default {
         getAllEntries().then(response => (this.logbookEntries = response.data));
     },
     methods: {
-        deleteEntry(entry) {
-            deleteEntry(entry).then(response => {
-                if (response.status === 200) {
-                    this.logbookEntries.splice(this.logbookEntries.indexOf(entry), 1);
-                }
-            });
+        updateEntriesArray(entry) {
+            this.logbookEntries.splice(this.logbookEntries.indexOf(entry), 1);
         },
     },
 };
 </script>
 
 <style lang="scss" scoped>
-.container {
-    .column {
-        color: #fff;
-        .title,
-        .subtitle {
-            color: #fff;
-        }
-    }
+section {
+    height: calc(100vh - 3.25rem);
 }
 </style>
