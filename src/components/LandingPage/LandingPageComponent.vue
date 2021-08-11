@@ -9,7 +9,7 @@
                     <h2 class="subtitle">
                         Access and keep track of your flight logs, wherever you are!
                     </h2>
-                    <h1 class="title">Coming soon</h1>
+                    <h1 class="title">Please log in or register.</h1>
                 </div>
             </div>
         </div>
@@ -17,9 +17,21 @@
 </template>
 
 <script>
+import router from "../../router";
+
 export default {
     name: "LandingPage",
     components: {},
+    props: {
+        successfulLogin: Boolean,
+        isUserLoggedIn: Boolean,
+        user: {},
+    },
+    mounted() {
+        if (this.successfulLogin) {
+            router.go();
+        }
+    },
 };
 </script>
 

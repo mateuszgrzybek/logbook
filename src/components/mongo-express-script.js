@@ -1,5 +1,43 @@
 import axios from "axios";
 
+export const createUser = async item => {
+    let data = {
+        firstName: item.firstName,
+        lastName: item.lastName,
+        email: item.email,
+        password: item.password,
+    };
+    let request = {
+        url: "http://localhost:3000/api/user/register", // domain should be used here in prod build
+        method: "post",
+        headers: {
+            "Content-type": "application/json",
+        },
+        data: JSON.stringify(data),
+    };
+
+    const response = await axios(request);
+    return response;
+};
+
+export const loginUser = async item => {
+    let data = {
+        email: item.email,
+        password: item.password,
+    };
+    let request = {
+        url: "http://localhost:3000/api/user/login", // domain should be used here in prod build
+        method: "post",
+        headers: {
+            "Content-type": "application/json",
+        },
+        data: JSON.stringify(data),
+    };
+
+    const response = await axios(request);
+    return response;
+};
+
 export const createNewEntry = async item => {
     let data = {
         pilotName: item.pilotName, // authorized user should be used here in future prod build

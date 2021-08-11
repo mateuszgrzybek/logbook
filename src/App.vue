@@ -16,8 +16,17 @@
             <div id="navbarMenu" class="navbar-menu">
                 <div class="navbar-end">
                     <NavButton routeName="LandingPage" btnText="Home" iconClass="fa-home"></NavButton>
-                    <NavButton routeName="Flights" btnText="Flights" iconClass="fa-plane-departure"></NavButton>
-                    <NavButton btnText="Fleet" iconClass="fa-plane"></NavButton>
+                    <NavButton v-if="!isUserLoggedIn" routeName="Login" btnText="Login" iconClass="fa-door-open"></NavButton>
+                    <NavButton v-if="!isUserLoggedIn" routeName="Register" btnText="Register" iconClass="fa-user-plus"></NavButton>
+                    <NavButton v-if="isUserLoggedIn" routeName="Flights" btnText="Flights" iconClass="fa-plane-departure"></NavButton>
+                    <NavButton v-if="isUserLoggedIn" btnText="Fleet" iconClass="fa-plane"></NavButton>
+                    <NavButton
+                        v-on:click="logUserOut"
+                        v-if="isUserLoggedIn"
+                        routeName="LandingPage"
+                        btnText="Log Out"
+                        iconClass="fa-door-open"
+                    ></NavButton>
                 </div>
             </div>
         </nav>
@@ -28,6 +37,7 @@
 <script>
 import Slideshow from "./components/LandingPage/SlideshowComponent.vue";
 import NavButton from "./components/LandingPage/NavButtonComponent.vue";
+import jwt_decode from "jwt-decode";
 
 export default {
     name: "App",
@@ -37,10 +47,24 @@ export default {
     },
     data() {
         return {
+            user: {},
+            isUserLoggedIn: false,
             topFadeOverlay: Element,
         };
     },
     methods: {
+        getUserDetails() {
+            let token = sessionStorage.getItem("jwt");
+            if (token !== null) {
+                let decoded = jwt_decode(token);
+                this.user = decoded;
+                this.isUserLoggedIn = true;
+            }
+        },
+        logUserOut() {
+            sessionStorage.removeItem("jwt");
+            this.isUserLoggedIn = false;
+        },
         scrollHandler() {
             this.setOverlay(this.topFadeOverlay);
         },
@@ -52,9 +76,11 @@ export default {
             }
         },
     },
+    created() {
+        this.getUserDetails();
+    },
     mounted() {
         this.topFadeOverlay = document.querySelector(".top-fade-overlay");
-        console.log(this.topFadeOverlay);
         window.addEventListener("scroll", this.scrollHandler);
     },
     unmounted() {
