@@ -8,6 +8,7 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { dom } from "@fortawesome/fontawesome-svg-core";
+import userStore from "./store";
 
 library.add(fas);
 library.add(fab);
@@ -17,5 +18,6 @@ dom.watch();
 const app = createApp(App);
 
 app.use(router);
+app.use(userStore);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app");

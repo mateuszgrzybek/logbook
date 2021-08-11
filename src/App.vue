@@ -35,9 +35,10 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
+import { computed } from "vue";
 import Slideshow from "./components/LandingPage/SlideshowComponent.vue";
 import NavButton from "./components/LandingPage/NavButtonComponent.vue";
-import jwt_decode from "jwt-decode";
 
 export default {
     name: "App",
@@ -45,25 +46,27 @@ export default {
         Slideshow,
         NavButton,
     },
+    setup() {
+        const store = useStore();
+        const firstName = computed(() => store.state.firstName);
+        const lastName = computed(() => store.state.lastName);
+        const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
+
+        function userLogOut() {
+            store.commit("userLogOut");
+        }
+
+        return { firstName, lastName, isUserLoggedIn, userLogOut };
+    },
     data() {
         return {
-            user: {},
-            isUserLoggedIn: false,
             topFadeOverlay: Element,
         };
     },
     methods: {
-        getUserDetails() {
-            let token = sessionStorage.getItem("jwt");
-            if (token !== null) {
-                let decoded = jwt_decode(token);
-                this.user = decoded;
-                this.isUserLoggedIn = true;
-            }
-        },
         logUserOut() {
             sessionStorage.removeItem("jwt");
-            this.isUserLoggedIn = false;
+            this.userLogOut();
         },
         scrollHandler() {
             this.setOverlay(this.topFadeOverlay);
@@ -75,9 +78,6 @@ export default {
                 overlay.classList.remove("overlay-active");
             }
         },
-    },
-    created() {
-        this.getUserDetails();
     },
     mounted() {
         this.topFadeOverlay = document.querySelector(".top-fade-overlay");

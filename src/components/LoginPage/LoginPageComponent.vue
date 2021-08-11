@@ -27,15 +27,34 @@
 
 <script>
 import { loginUser } from "../mongo-express-script";
+import { useStore } from "vuex";
+import { computed } from "vue";
 import router from "../../router";
+import jwt_decode from "jwt-decode";
 
 export default {
+    setup() {
+        const store = useStore();
+        const firstName = computed(() => store.state.firstName);
+        const lastName = computed(() => store.state.lastName);
+        const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
+
+        function userLogIn() {
+            store.commit("userLogIn", {
+                firstName: this.user.firstName,
+                lastName: this.user.lastName,
+            });
+        }
+
+        return { firstName, lastName, isUserLoggedIn, userLogIn };
+    },
     data() {
         return {
             login: {
                 email: "",
                 password: "",
             },
+            user: {},
         };
     },
     methods: {
@@ -48,11 +67,20 @@ export default {
             loginUser(loginCredentials)
                 .then(response => {
                     sessionStorage.setItem("jwt", response.data.token);
-                    router.push({ name: "LandingPage", params: { successfulLogin: true, isUserLoggedIn: true } });
+                    this.getUserDetails(response.data.token);
+                    this.userLogIn();
+                    router.push({ name: "LandingPage" });
                 })
                 .catch(error => {
                     console.log(`An error has occured:\n${error}`);
                 });
+        },
+
+        getUserDetails(token) {
+            if (token !== null) {
+                let decoded = jwt_decode(token);
+                this.user = decoded;
+            }
         },
     },
 };
