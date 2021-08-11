@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         logUserOut() {
-            sessionStorage.removeItem("jwt");
+            sessionStorage.clear();
             this.userLogOut();
         },
         scrollHandler() {

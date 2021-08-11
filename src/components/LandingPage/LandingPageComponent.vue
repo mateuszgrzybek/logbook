@@ -17,7 +17,7 @@
                         Welcome to your personal logbook.
                     </h2>
                     <h2 class="subtitle pt-0">
-                        Whenever you want, wherever you are.
+                        Whenever you need it, wherever you are.
                     </h2>
                 </div>
             </div>
@@ -34,7 +34,6 @@ export default {
     components: {},
     setup() {
         const store = useStore();
-        console.log(store.state);
         const firstName = computed(() => store.state.firstName);
         const lastName = computed(() => store.state.lastName);
         const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);

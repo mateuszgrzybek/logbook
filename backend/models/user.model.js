@@ -22,6 +22,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
+        logbookEntries: [],
         tokens: [
             {
                 token: {

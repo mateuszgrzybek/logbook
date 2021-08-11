@@ -16,7 +16,7 @@
                 </div>
                 <div class="mb-5">
                     <label for="password" class="title is-6 has-text-white">Password</label>
-                    <input name="password" class="input" v-model="register.password" />
+                    <input type="password" name="password" class="input" v-model="register.password" />
                 </div>
             </form>
             <button class="button is-white is-outlined mb-5" type="submit" v-on:click="registerUser">
@@ -53,7 +53,8 @@ export default {
                 firstName: this.register.firstName,
                 lastName: this.register.lastName,
                 email: this.register.email,
-                password: this.register.email,
+                password: this.register.password,
+                logbookEntries: [],
             };
 
             createUser(newUser)

@@ -8,7 +8,7 @@
                 </div>
                 <div class="mb-5">
                     <label for="password" class="title is-6 has-text-white">Password</label>
-                    <input name="password" class="input" v-model="login.password" />
+                    <input type="password" name="password" class="input" v-model="login.password" />
                 </div>
             </form>
             <button class="button is-white is-outlined mb-5" type="submit" v-on:click="loginUser">
@@ -30,7 +30,7 @@ import { loginUser } from "../mongo-express-script";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import router from "../../router";
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
 
 export default {
     setup() {
@@ -38,15 +38,18 @@ export default {
         const firstName = computed(() => store.state.firstName);
         const lastName = computed(() => store.state.lastName);
         const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
+        const userId = computed(() => store.state.userId);
 
         function userLogIn() {
             store.commit("userLogIn", {
                 firstName: this.user.firstName,
                 lastName: this.user.lastName,
+                userId: this.user._id,
+                userEntries: this.user.logbookEntries,
             });
         }
 
-        return { firstName, lastName, isUserLoggedIn, userLogIn };
+        return { firstName, lastName, isUserLoggedIn, userId, userLogIn };
     },
     data() {
         return {
@@ -64,24 +67,23 @@ export default {
                 password: this.login.password,
             };
 
-            loginUser(loginCredentials)
-                .then(response => {
-                    sessionStorage.setItem("jwt", response.data.token);
-                    this.getUserDetails(response.data.token);
-                    this.userLogIn();
-                    router.push({ name: "LandingPage" });
-                })
-                .catch(error => {
-                    console.log(`An error has occured:\n${error}`);
-                });
+            loginUser(loginCredentials).then(response => {
+                sessionStorage.setItem("jwt", response.data.token);
+                this.user = response.data.user;
+                this.userLogIn();
+                router.push({ name: "LandingPage" });
+            });
         },
 
-        getUserDetails(token) {
-            if (token !== null) {
-                let decoded = jwt_decode(token);
-                this.user = decoded;
-            }
-        },
+        // TODO: Check if code is necessary to use
+        // getUserDetails(token) {
+        //     if (token !== null) {
+        //         let decoded = jwt_decode(token);
+        //         console.log(decoded);
+        //         this.user = decoded;
+        //         console.log(this.user);
+        //     }
+        // },
     },
 };
 </script>
