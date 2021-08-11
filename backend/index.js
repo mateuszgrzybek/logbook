@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
 require("dotenv").config();
 
 const app = express();
@@ -12,6 +13,9 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// morgan dev logging
+app.use(morgan("dev"));
 
 const db = require("./models");
 db.mongoose
@@ -31,6 +35,9 @@ db.mongoose
 
 const logbook = require("./routes/logbook");
 app.use("/api/logbook", logbook);
+
+const user = require("./routes/user");
+app.use("/api/user", user);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
