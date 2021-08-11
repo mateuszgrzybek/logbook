@@ -39,19 +39,33 @@
 </template>
 
 <script>
-import { deleteEntry } from "../mongo-express-script";
+import { deleteEntry, deleteUserEntry } from "../mongo-express-script";
+import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
+    setup() {
+        const store = useStore();
+        const userId = computed(() => store.state.userId);
+
+        return { userId };
+    },
     name: "FlightCard",
     props: {
         logbookEntry: Object,
     },
     methods: {
         deleteEntry(entry) {
-            deleteEntry(entry).then(response => {
-                if (response.status === 200) {
-                    this.$emit("EntryDeleted", entry);
-                }
+            const payload = {
+                userId: this.userId,
+                entryId: entry._id,
+            };
+            deleteUserEntry(payload).then(() => {
+                deleteEntry(entry).then(response => {
+                    if (response.status === 200) {
+                        this.$emit("EntryDeleted", entry);
+                    }
+                });
             });
         },
     },

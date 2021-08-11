@@ -2,14 +2,23 @@
     <section class="hero is-info is-fullheight-with-navbar">
         <div class="hero-body">
             <div class="container has-text-centered">
-                <div class="column is-6 is-offset-3">
+                <div v-if="!isUserLoggedIn" class="column is-6 is-offset-3">
                     <h1 class="title">
                         Web based solution for your Logbook
                     </h1>
                     <h2 class="subtitle">
                         Access and keep track of your flight logs, wherever you are!
                     </h2>
-                    <h1 class="title">Coming soon</h1>
+                    <h1 class="title">Please log in or register.</h1>
+                </div>
+                <div v-if="isUserLoggedIn" class="column is-6 is-offset-3">
+                    <h1 class="title">Hello {{ firstName }} {{ lastName }}</h1>
+                    <h2 class="subtitle pb-0 pt-4">
+                        Welcome to your personal logbook.
+                    </h2>
+                    <h2 class="subtitle pt-0">
+                        Whenever you need it, wherever you are.
+                    </h2>
                 </div>
             </div>
         </div>
@@ -17,9 +26,20 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
+import { computed } from "vue";
+
 export default {
     name: "LandingPage",
     components: {},
+    setup() {
+        const store = useStore();
+        const firstName = computed(() => store.state.firstName);
+        const lastName = computed(() => store.state.lastName);
+        const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
+
+        return { firstName, lastName, isUserLoggedIn };
+    },
 };
 </script>
 

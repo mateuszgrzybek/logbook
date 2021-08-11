@@ -4,8 +4,12 @@
             <form>
                 <div class="column is-5">
                     <div class="mb-5">
-                        <label for="pilotName" class="title is-6 has-text-white">Pilot's name</label>
-                        <input name="pilotName" class="input" v-model="pilotName" />
+                        <label for="firstName" class="title is-6 has-text-white">First name</label>
+                        <input name="firstName" class="input" readonly v-model="firstName" />
+                    </div>
+                    <div class="mb-5">
+                        <label for="lastName" class="title is-6 has-text-white">Last name</label>
+                        <input name="lastName" class="input" readonly v-model="lastName" />
                     </div>
                     <div class="mb-5">
                         <label for="aircraftICAO" class="title is-6 has-text-white">Aircraft ICAO</label>
@@ -81,7 +85,9 @@
 
 <script>
 import { DatePicker } from "v-calendar";
-import { createNewEntry } from "../mongo-express-script";
+import { createNewEntry, addUserEntry } from "../mongo-express-script";
+import { useStore } from "vuex";
+import { computed } from "vue";
 import router from "../../router";
 import axios from "axios";
 
@@ -90,9 +96,18 @@ export default {
     components: {
         DatePicker,
     },
+    setup() {
+        const store = useStore();
+        const firstName = computed(() => store.state.firstName);
+        const lastName = computed(() => store.state.lastName);
+        const userId = computed(() => store.state.userId);
+        const userEntries = computed(() => store.state.userEntries);
+
+        return { firstName, lastName, userId, userEntries };
+    },
     data() {
         return {
-            pilotName: "",
+            pilotName: `${this.firstName} ${this.lastName}`,
             depICAO: "",
             arrICAO: "",
             depTimeZulu: new Date(),
@@ -121,8 +136,18 @@ export default {
                     planeSpottersPhotoSource: this.planeSpottersPhotoSource,
                 };
 
-                createNewEntry(newEntry);
-                router.go(-1);
+                createNewEntry(newEntry).then(response => {
+                    const newEntryId = response.data._id;
+                    const userId = this.userId;
+                    const payload = {
+                        entryId: newEntryId,
+                        userId: userId,
+                    };
+                    addUserEntry(payload).then(() => {
+                        this.userEntries.push(newEntryId);
+                        router.go(-1);
+                    });
+                });
             });
         },
         updateFlightTime() {
