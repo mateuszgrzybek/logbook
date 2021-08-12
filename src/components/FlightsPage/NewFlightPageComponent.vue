@@ -1,33 +1,36 @@
 <template>
     <section class="section is-info is-fullheight">
         <div class="container">
-            <form>
+            <Form @submit="createNewEntry">
                 <div class="column is-5">
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="firstName" class="title is-6 has-text-white">First name</label>
                         <input name="firstName" class="input" readonly v-model="firstName" />
                     </div>
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="lastName" class="title is-6 has-text-white">Last name</label>
                         <input name="lastName" class="input" readonly v-model="lastName" />
                     </div>
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="aircraftICAO" class="title is-6 has-text-white">Aircraft ICAO</label>
-                        <input name="aircraftICAO" class="input" v-model="aircraftICAO" />
+                        <Field rules="icao" name="aircraftICAO" class="input icao" maxlength="4" v-model="aircraftICAO" />
+                        <ErrorMessage name="aircraftICAO" />
                     </div>
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="aircraftRegistration" class="title is-6 has-text-white">Aircraft registration</label>
                         <input name="aircraftRegistration" class="input" v-model="aircraftRegistration" />
                     </div>
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="depICAO" class="title is-6 has-text-white">Departure airport ICAO</label>
-                        <input name="depICAO" class="input" v-model="depICAO" />
+                        <Field rules="icao" name="depICAO" class="input icao" maxlength="4" v-model="depICAO" />
+                        <ErrorMessage name="depICAO" />
                     </div>
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="arrICAO" class="title is-6 has-text-white">Arrival airport ICAO</label>
-                        <input name="arrICAO" class="input" v-model="arrICAO" />
+                        <Field rules="icao" name="arrICAO" class="input icao" maxlength="4" v-model="arrICAO" />
+                        <ErrorMessage name="arrICAO" />
                     </div>
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="depTimeZulu" class="title is-6 has-text-white">Departure time</label>
                         <DatePicker v-model="depTimeZulu" mode="dateTime" color="blue" is-dark is24hr>
                             <template v-slot="{ inputValue, togglePopover }">
@@ -46,7 +49,7 @@
                             </template>
                         </DatePicker>
                     </div>
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="arrTimeZulu" class="title is-6 has-text-white">Arrival time</label>
                         <DatePicker v-model="arrTimeZulu" mode="dateTime" color="blue" is-dark is24hr>
                             <template v-slot="{ inputValue, togglePopover }">
@@ -65,25 +68,27 @@
                             </template>
                         </DatePicker>
                     </div>
-                    <div class="mb-5">
+                    <div class="input-wrapper mb-5">
                         <label for="flightTime" class="title is-6 has-text-white">Flight time</label>
-                        <input name="flightTime" class="input" v-model="flightTime" readonly />
+                        <Field rules="flightTime" name="flightTime" class="input" v-model="flightTime" readonly />
+                        <ErrorMessage name="flightTime" />
                     </div>
                 </div>
                 <div class="column is-5">
-                    <button type="button" class="button is-white is-outlined" v-on:click="createNewEntry">
+                    <button type="submit" class="button is-white is-outlined">
                         <span class="icon">
                             <i class="fa fa-plane-arrival"></i>
                         </span>
                         <span>Submit new entry</span>
                     </button>
                 </div>
-            </form>
+            </Form>
         </div>
     </section>
 </template>
 
 <script>
+import { Form, Field, ErrorMessage } from "vee-validate";
 import { DatePicker } from "v-calendar";
 import { createNewEntry, addUserEntry } from "../mongo-express-script";
 import { useStore } from "vuex";
@@ -95,6 +100,9 @@ export default {
     name: "NewFlight",
     components: {
         DatePicker,
+        Form,
+        Field,
+        ErrorMessage,
     },
     setup() {
         const store = useStore();
@@ -126,12 +134,12 @@ export default {
 
                 const newEntry = {
                     pilotName: this.pilotName,
-                    depICAO: this.depICAO,
-                    arrICAO: this.arrICAO,
+                    depICAO: this.depICAO.toUpperCase(),
+                    arrICAO: this.arrICAO.toUpperCase(),
                     depTimeZulu: this.depTimeZulu.toISOString(),
                     arrTimeZulu: this.arrTimeZulu.toISOString(),
                     flightTime: this.flightTime,
-                    aircraftICAO: this.aircraftICAO,
+                    aircraftICAO: this.aircraftICAO.toUpperCase(),
                     aircraftRegistration: this.aircraftRegistration,
                     planeSpottersPhotoSource: this.planeSpottersPhotoSource,
                 };
