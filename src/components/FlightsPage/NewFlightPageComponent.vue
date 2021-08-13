@@ -1,8 +1,8 @@
 <template>
     <section class="section is-info is-fullheight">
         <div class="container">
-            <Form @submit="createNewEntry">
-                <div class="column is-5">
+            <div class="columns">
+                <Form class="column is-half" @submit="createNewEntry">
                     <div class="input-wrapper mb-5">
                         <label for="firstName" class="title is-6 has-text-white">First name</label>
                         <input name="firstName" class="input" readonly v-model="firstName" />
@@ -16,9 +16,33 @@
                         <Field rules="icao" name="aircraftICAO" class="input icao" maxlength="4" v-model="aircraftICAO" />
                         <ErrorMessage name="aircraftICAO" />
                     </div>
-                    <div class="input-wrapper mb-5">
+                    <div class="input-wrapper mb-3">
                         <label for="aircraftRegistration" class="title is-6 has-text-white">Aircraft registration</label>
-                        <input name="aircraftRegistration" class="input" v-model="aircraftRegistration" />
+                        <Field
+                            rules="required"
+                            name="aircraftRegistration"
+                            class="input"
+                            v-model="aircraftRegistration"
+                            v-on:blur="getImgUrl"
+                        />
+                        <ErrorMessage name="aircraftRegistration" />
+                    </div>
+                    <div class="card is-hidden-tablet mb-5">
+                        <header class="card-header">
+                            <p class="card-header-title py-2 pl-3">
+                                Aircraft photo
+                            </p>
+                            <button type="button" class="card-header-icon p-2" aria-label="more options">
+                                <span class="icon">
+                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </header>
+                        <div class="card-image is-hidden">
+                            <figure class="image is-3by2">
+                                <img :src="planeSpottersPhotoSource" alt="Aircraft image" />
+                            </figure>
+                        </div>
                     </div>
                     <div class="input-wrapper mb-5">
                         <label for="depICAO" class="title is-6 has-text-white">Departure airport ICAO</label>
@@ -42,7 +66,7 @@
                                             </span>
                                         </button>
                                     </div>
-                                    <div class="control">
+                                    <div class="control is-expanded">
                                         <input :value="inputValue" class="input" readonly />
                                     </div>
                                 </div>
@@ -61,7 +85,7 @@
                                             </span>
                                         </button>
                                     </div>
-                                    <div class="control">
+                                    <div class="control is-expanded">
                                         <input :value="inputValue" class="input" readonly />
                                     </div>
                                 </div>
@@ -73,16 +97,22 @@
                         <Field rules="flightTime" name="flightTime" class="input" v-model="flightTime" readonly />
                         <ErrorMessage name="flightTime" />
                     </div>
-                </div>
-                <div class="column is-5">
                     <button type="submit" class="button is-white is-outlined">
                         <span class="icon">
                             <i class="fa fa-plane-arrival"></i>
                         </span>
                         <span>Submit new entry</span>
                     </button>
+                </Form>
+                <div
+                    v-if="isMatchingPhoto"
+                    class="is-hidden-mobile column is-half is-flex is-flex-direction-column is-justify-content-center"
+                >
+                    <figure class="image is-3by2">
+                        <img :src="planeSpottersPhotoSource" class="aircraft-preview-image" alt="Aircraft image" />
+                    </figure>
                 </div>
-            </Form>
+            </div>
         </div>
     </section>
 </template>
@@ -113,6 +143,9 @@ export default {
 
         return { firstName, lastName, userId, userEntries };
     },
+    mounted() {
+        this.enableCardVisibilityToggle();
+    },
     data() {
         return {
             pilotName: `${this.firstName} ${this.lastName}`,
@@ -123,44 +156,66 @@ export default {
             flightTime: 0,
             aircraftICAO: "",
             aircraftRegistration: "",
-            planeSpottersPhotoSource: "",
+            planeSpottersPhotoSource: require("../../assets/images/placeholder.png"),
+            isMatchingPhoto: false,
         };
     },
     methods: {
         createNewEntry() {
-            axios.get(`https://api.planespotters.net/pub/photos/reg/${this.aircraftRegistration}`).then(response => {
-                const photos = response.data.photos;
-                this.planeSpottersPhotoSource = photos.length === 0 ? "" : photos[0].thumbnail_large.src;
+            const newEntry = {
+                pilotName: this.pilotName,
+                depICAO: this.depICAO.toUpperCase(),
+                arrICAO: this.arrICAO.toUpperCase(),
+                depTimeZulu: this.depTimeZulu.toISOString(),
+                arrTimeZulu: this.arrTimeZulu.toISOString(),
+                flightTime: this.flightTime,
+                aircraftICAO: this.aircraftICAO.toUpperCase(),
+                aircraftRegistration: this.aircraftRegistration,
+                planeSpottersPhotoSource: this.planeSpottersPhotoSource,
+            };
 
-                const newEntry = {
-                    pilotName: this.pilotName,
-                    depICAO: this.depICAO.toUpperCase(),
-                    arrICAO: this.arrICAO.toUpperCase(),
-                    depTimeZulu: this.depTimeZulu.toISOString(),
-                    arrTimeZulu: this.arrTimeZulu.toISOString(),
-                    flightTime: this.flightTime,
-                    aircraftICAO: this.aircraftICAO.toUpperCase(),
-                    aircraftRegistration: this.aircraftRegistration,
-                    planeSpottersPhotoSource: this.planeSpottersPhotoSource,
+            createNewEntry(newEntry).then(response => {
+                const newEntryId = response.data._id;
+                const userId = this.userId;
+                const payload = {
+                    entryId: newEntryId,
+                    userId: userId,
                 };
-
-                createNewEntry(newEntry).then(response => {
-                    const newEntryId = response.data._id;
-                    const userId = this.userId;
-                    const payload = {
-                        entryId: newEntryId,
-                        userId: userId,
-                    };
-                    addUserEntry(payload).then(() => {
-                        this.userEntries.push(newEntryId);
-                        router.go(-1);
-                    });
+                addUserEntry(payload).then(() => {
+                    this.userEntries.push(newEntryId);
+                    router.go(-1);
                 });
             });
         },
         updateFlightTime() {
             let difference = Math.abs(this.arrTimeZulu.getTime() - this.depTimeZulu.getTime()) / 1000 / 3600;
             this.flightTime = Math.round((difference + Number.EPSILON) * 100) / 100;
+        },
+        getImgUrl() {
+            if (this.aircraftRegistration.length > 0) {
+                axios.get(`https://api.planespotters.net/pub/photos/reg/${this.aircraftRegistration}`).then(response => {
+                    const photos = response.data.photos;
+                    if (photos.length > 0) {
+                        this.planeSpottersPhotoSource = photos.length === 0 ? "" : photos[0].thumbnail_large.src;
+                        this.isMatchingPhoto = true;
+                    } else {
+                        this.setPlaceholderImage();
+                    }
+                });
+            } else {
+                this.setPlaceholderImage();
+            }
+        },
+        enableCardVisibilityToggle() {
+            const mobileCardToggle = document.getElementsByClassName("card-header-icon")[0];
+            const mobileCardImage = document.getElementsByClassName("card-image")[0];
+            mobileCardToggle.addEventListener("click", () => {
+                mobileCardImage.classList.toggle("is-hidden");
+            });
+        },
+        setPlaceholderImage() {
+            this.isMatchingPhoto = false;
+            this.planeSpottersPhotoSource = require("../../assets/images/placeholder.png");
         },
     },
     watch: {
@@ -174,4 +229,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.aircraft-preview-image {
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 30px 9px rgba(0, 0, 0, 0.5);
+}
+</style>

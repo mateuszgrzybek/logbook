@@ -9,9 +9,15 @@ exports.registerNewUser = async (req, res) => {
             password: req.body.password,
             logbookEntries: req.body.logbookEntries,
         });
-        let data = await user.save();
-        const token = await user.generateAuthToken();
-        res.status(201).json({ data, token });
+        User.findOne({ email: user.email }).then(async response => {
+            if (response) {
+                res.status(409).json({});
+            } else {
+                let data = await user.save();
+                const token = await user.generateAuthToken();
+                res.status(201).json({ data, token });
+            }
+        });
     } catch (err) {
         res.status(400).json({ err: err });
     }
