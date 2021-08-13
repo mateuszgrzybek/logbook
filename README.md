@@ -1,8 +1,14 @@
-# vue-logbook
+# Logbook Anywhere ✈️
 
-PoC for a web-based logbook solution based on MEVN stack.
+Web based flight logbook solution. Currently in initial version, which allows user registration, authentication and flight logging.
 
-### Setup
+### Tech stack
+
+-   Backend - Node.js Express Framework 🏎️
+-   Frontend - Vue 3 🖖, Sass 🖌️
+-   Database - MongoDB 🥭 🍃
+
+### Local development setup 101
 
 1. Copy `.env.sample` and remove the `.sample` part
 2. Set the connection string according to your MongoDB setup
