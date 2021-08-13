@@ -22,6 +22,11 @@
                     <Field rules="password" type="password" name="password" class="input" v-model="register.password" />
                     <ErrorMessage name="password" />
                 </div>
+                <div v-if="isRegistrationError" class="login-error-wrapper mb-5">
+                    <p class="has-text-danger-dark has-text-centered has-text-weight-semibold">
+                        User with that email address already exists
+                    </p>
+                </div>
                 <button class="button is-white is-outlined" type="submit">
                     <span class="icon">
                         <i class="fa fa-user-plus"></i>
@@ -55,6 +60,7 @@ export default {
                 email: "",
                 password: "",
             },
+            isRegistrationError: false,
         };
     },
     methods: {
@@ -74,8 +80,20 @@ export default {
                     router.go(-1);
                 })
                 .catch(error => {
+                    console.log(error.response);
+                    if (error.response.status === 409) {
+                        this.isRegistrationError = true;
+                    }
                     console.log(`An error has occured:\n${error}`);
                 });
+        },
+    },
+    watch: {
+        register: {
+            deep: true,
+            handler() {
+                this.isRegistrationError = false;
+            },
         },
     },
 };
