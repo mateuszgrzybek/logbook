@@ -12,6 +12,11 @@
                     <Field rules="required" type="password" name="password" class="input" v-model="login.password" />
                     <ErrorMessage name="password" />
                 </div>
+                <div v-if="isLoginError" class="login-error-wrapper mb-5">
+                    <p class="has-text-danger-dark has-text-centered has-text-weight-semibold">
+                        Couldn't find a user matching your credentials
+                    </p>
+                </div>
                 <button class="button is-white is-outlined" type="submit">
                     <span class="icon">
                         <i class="fa fa-door-open"></i>
@@ -66,6 +71,7 @@ export default {
                 password: "",
             },
             user: {},
+            isLoginError: false,
         };
     },
     methods: {
@@ -75,12 +81,19 @@ export default {
                 password: this.login.password,
             };
 
-            loginUser(loginCredentials).then(response => {
-                sessionStorage.setItem("jwt", response.data.token);
-                this.user = response.data.user;
-                this.userLogIn();
-                router.push({ name: "LandingPage" });
-            });
+            loginUser(loginCredentials)
+                .then(response => {
+                    console.log(response);
+                    sessionStorage.setItem("jwt", response.data.token);
+                    this.user = response.data.user;
+                    this.userLogIn();
+                    router.push({ name: "LandingPage" });
+                })
+                .catch(error => {
+                    if (error.response.status === 400) {
+                        this.isLoginError = true;
+                    }
+                });
         },
 
         // TODO: Check if code is necessary to use
@@ -92,6 +105,14 @@ export default {
         //         console.log(this.user);
         //     }
         // },
+    },
+    watch: {
+        login: {
+            deep: true,
+            handler() {
+                this.isLoginError = false;
+            },
+        },
     },
 };
 </script>

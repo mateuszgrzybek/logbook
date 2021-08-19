@@ -7,17 +7,70 @@
             <h2 class="subtitle has-text-white">
                 Here you can find all your logbook entries.
             </h2>
-            <router-link class="button is-white is-outlined mb-5" :to="{ name: 'NewFlight' }">
+            <router-link class="button is-white is-outlined mb-5 mr-5" :to="{ name: 'NewFlight' }">
                 <span class="icon">
                     <i class="fa fa-plus"></i>
                 </span>
                 <span>Log a new flight</span>
             </router-link>
-            <div class="columns is-multiline">
+            <button class="button is-white is-outlined mb-5" v-on:click="switchView()">
+                <span class="icon">
+                    <i class="fa fa-table"></i>
+                </span>
+                <span>{{ changeViewText }}</span>
+            </button>
+            <h2 v-if="!logbookEntries.length" class="subtitle has-text-white">
+                You haven't logged any flights yet.
+            </h2>
+            <div v-if="!isTableView" class="columns is-multiline">
                 <div v-for="logbookEntry in logbookEntries" :key="logbookEntry._id" class="column is-one-third mb-6">
                     <FlightCard :logbookEntry="logbookEntry" @EntryDeleted="updateEntriesArray"></FlightCard>
                 </div>
             </div>
+            <table v-if="isTableView" class="table">
+                <thead>
+                    <tr>
+                        <th><abbr title="Pilot">Pilot's name</abbr></th>
+                        <th><abbr title="Acf. ICAO">Aircraft ICAO</abbr></th>
+                        <th><abbr title="Acf. reg.">Aicraft registration</abbr></th>
+                        <th><abbr title="Dep. ICAO">Departure airport ICAO</abbr></th>
+                        <th><abbr title="Arr. ICAO">Arrival airport ICAO</abbr></th>
+                        <th><abbr title="Dep. time">Departure time</abbr></th>
+                        <th><abbr title="Arr. time">Arrival time</abbr></th>
+                        <th><abbr title="Flt. Time">Flight time</abbr></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="logbookEntry in logbookEntries" :key="logbookEntry._id">
+                        <td>{{ logbookEntry.pilotName }}</td>
+                        <td>{{ logbookEntry.aircraftICAO }}</td>
+                        <td>{{ logbookEntry.aircraftRegistration }}</td>
+                        <td>{{ logbookEntry.depICAO }}</td>
+                        <td>{{ logbookEntry.arrICAO }}</td>
+                        <td>{{ logbookEntry.depTimeZulu }}</td>
+                        <td>{{ logbookEntry.arrTimeZulu }}</td>
+                        <td>{{ logbookEntry.flightTime }}</td>
+                        <td>
+                            <button type="button" class="button" v-on:click="deleteEntry(logbookEntry)">
+                                <span class="icon mr-1">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                                <span>Delete</span>
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="button">
+                                <span class="icon mr-1">
+                                    <i class="fa fa-pen"></i>
+                                </span>
+                                <span>Edit</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
 </template>
@@ -34,12 +87,18 @@ export default {
         const userId = computed(() => store.state.userId);
         const userEntries = computed(() => store.state.userEntries);
 
-        return { userId, userEntries };
+        function deleteUserEntry(entryId) {
+            store.commit("deleteUserEntry", entryId);
+        }
+
+        return { userId, userEntries, deleteUserEntry };
     },
     name: "FlightsPage",
     data() {
         return {
             logbookEntries: [],
+            changeViewText: this.isTableView ? "Switch to card view" : "Switch to table view",
+            isTableView: false,
         };
     },
     components: {
@@ -59,7 +118,11 @@ export default {
     methods: {
         updateEntriesArray(entry) {
             this.logbookEntries.splice(this.logbookEntries.indexOf(entry), 1);
-            this.userEntries.splice(this.userEntries.indexOf(entry._id), 1);
+            this.deleteUserEntry(entry._id);
+        },
+        switchView() {
+            this.isTableView = !this.isTableView;
+            this.changeViewText = this.isTableView ? "Switch to card view" : "Switch to table view";
         },
     },
 };
