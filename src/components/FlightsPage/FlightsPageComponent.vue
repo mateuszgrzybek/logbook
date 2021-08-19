@@ -54,7 +54,11 @@ export default {
             store.commit("deleteUserEntry", entryId);
         }
 
-        return { userId, userEntries, deleteUserEntry };
+        function deleteAircraftType(aircraftICAO) {
+            store.commit("deleteAircraftType", aircraftICAO);
+        }
+
+        return { userId, userEntries, deleteUserEntry, deleteAircraftType };
     },
     name: "FlightsPage",
     data() {
@@ -83,6 +87,16 @@ export default {
         updateEntriesArray(entry) {
             this.logbookEntries.splice(this.logbookEntries.indexOf(entry), 1);
             this.deleteUserEntry(entry._id);
+
+            let entriesWithMatchingAircraftICAO = 0;
+            this.logbookEntries.forEach(logbookEntry => {
+                if (logbookEntry.aircraftICAO === entry.aircraftICAO) {
+                    entriesWithMatchingAircraftICAO++;
+                }
+            });
+            if (entriesWithMatchingAircraftICAO === 0) {
+                this.deleteAircraftType(entry.aircraftICAO);
+            }
         },
         switchView() {
             this.isTableView = !this.isTableView;

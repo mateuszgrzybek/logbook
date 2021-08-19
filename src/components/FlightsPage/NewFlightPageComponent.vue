@@ -145,7 +145,11 @@ export default {
             store.commit("addUserEntry", entryId);
         }
 
-        return { firstName, lastName, userId, userEntries, addUserEntry };
+        function addAircraftType(aircraftICAO) {
+            store.commit("addAircraftType", aircraftICAO);
+        }
+
+        return { firstName, lastName, userId, userEntries, addUserEntry, addAircraftType };
     },
     mounted() {
         this.enableCardVisibilityToggle();
@@ -187,6 +191,10 @@ export default {
                 };
                 addUserEntry(payload).then(() => {
                     this.addUserEntry(newEntryId);
+
+                    if (!this.aircraftTypes.includes(this.aircraftICAO)) {
+                        this.addAircraftType(newEntry.aircraftICAO);
+                    }
                     router.go(-1);
                 });
             });

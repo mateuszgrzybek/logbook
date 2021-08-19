@@ -13,6 +13,7 @@ const store = createStore({
         lastName: "",
         userId: "",
         userEntries: [],
+        aircraftTypes: [],
     },
     mutations: {
         userLogIn(state, payload) {
@@ -21,6 +22,7 @@ const store = createStore({
             state.isUserLoggedIn = true;
             state.userId = payload.userId;
             state.userEntries = payload.userEntries;
+            state.aircraftTypes = payload.aircraftTypes;
         },
         userLogOut(state) {
             state.isUserLoggedIn = false;
@@ -28,6 +30,7 @@ const store = createStore({
             state.lastName = "";
             state.userId = "";
             state.userEntries = [];
+            state.aircraftTypes = [];
         },
         addUserEntry(state, payload) {
             const newUserEntryId = payload;
@@ -36,6 +39,14 @@ const store = createStore({
         deleteUserEntry(state, payload) {
             const entryToDeleteId = payload;
             state.userEntries.splice(state.userEntries.indexOf(entryToDeleteId), 1);
+        },
+        addAircraftType(state, payload) {
+            const newEntryAircraftType = payload;
+            state.aircraftTypes.push(newEntryAircraftType);
+        },
+        deleteAircraftType(state, payload) {
+            const deletedEntryAircraftType = payload;
+            state.aircraftTypes.splice(state.aircraftTypes.indexOf(deletedEntryAircraftType), 1);
         },
     },
 });

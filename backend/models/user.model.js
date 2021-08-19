@@ -23,6 +23,7 @@ const userSchema = new Schema(
             required: true,
         },
         logbookEntries: [],
+        aircraftTypes: [],
         tokens: [
             {
                 token: {
@@ -54,6 +55,7 @@ userSchema.methods.generateAuthToken = async function() {
             lastName: user.lastName,
             email: user.email,
             logbookEntries: user.logbookEntries,
+            aircraftTypes: user.aircraftTypes,
         },
         "secret"
     );

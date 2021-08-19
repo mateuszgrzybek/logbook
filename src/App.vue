@@ -19,7 +19,7 @@
                     <NavButton v-if="!isUserLoggedIn" routeName="Login" btnText="Login" iconClass="fa-door-open"></NavButton>
                     <NavButton v-if="!isUserLoggedIn" routeName="Register" btnText="Register" iconClass="fa-user-plus"></NavButton>
                     <NavButton v-if="isUserLoggedIn" routeName="Flights" btnText="Flights" iconClass="fa-plane-departure"></NavButton>
-                    <NavButton v-if="isUserLoggedIn" btnText="Fleet" iconClass="fa-plane"></NavButton>
+                    <NavButton v-if="isUserLoggedIn" routeName="Fleet" btnText="Fleet" iconClass="fa-plane"></NavButton>
                     <NavButton
                         v-on:click="logUserOut"
                         v-if="isUserLoggedIn"
