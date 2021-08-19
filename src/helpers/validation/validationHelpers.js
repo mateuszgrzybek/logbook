@@ -55,6 +55,14 @@ defineRule("password", value => {
     return validateUserDataInputs(value, true, passwordValidationParams.regEx, passwordValidationParams.regExValidationMessage);
 });
 
+defineRule("passwordConfirmation", (value, [target]) => {
+    if (value === target) {
+        return true;
+    }
+
+    return "Passwords do not match each other";
+});
+
 defineRule("name", value => {
     return validateUserDataInputs(value, true, nameValidationParams.regEx, nameValidationParams.regExValidationMessage);
 });

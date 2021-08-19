@@ -22,6 +22,11 @@
                     <Field rules="password" type="password" name="password" class="input" v-model="register.password" />
                     <ErrorMessage name="password" />
                 </div>
+                <div class="input-wrapper mb-5">
+                    <label for="passwordConfirmation" class="title is-6 has-text-white">Repeat password</label>
+                    <Field name="passwordConfirmation" type="password" rules="passwordConfirmation:@password" class="input" />
+                    <ErrorMessage name="passwordConfirmation" />
+                </div>
                 <div v-if="isRegistrationError" class="login-error-wrapper mb-5">
                     <p class="has-text-danger-dark has-text-centered has-text-weight-semibold">
                         User with that email address already exists
