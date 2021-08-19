@@ -6,7 +6,8 @@ const emailValidationParams = {
 };
 const passwordValidationParams = {
     regEx: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-    regExValidationMessage: "Password must contain at least one letter, one number and one special character",
+    regExValidationMessage:
+        "Password must be at least 8 characters long, contain at least one letter, one number and one special character",
 };
 const nameValidationParams = {
     regEx: /^\p{L}+$/u,

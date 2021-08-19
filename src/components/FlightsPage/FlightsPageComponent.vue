@@ -34,7 +34,11 @@ export default {
         const userId = computed(() => store.state.userId);
         const userEntries = computed(() => store.state.userEntries);
 
-        return { userId, userEntries };
+        function deleteUserEntry(entryId) {
+            store.commit("deleteUserEntry", entryId);
+        }
+
+        return { userId, userEntries, deleteUserEntry };
     },
     name: "FlightsPage",
     data() {
@@ -59,7 +63,7 @@ export default {
     methods: {
         updateEntriesArray(entry) {
             this.logbookEntries.splice(this.logbookEntries.indexOf(entry), 1);
-            this.userEntries.splice(this.userEntries.indexOf(entry._id), 1);
+            this.deleteUserEntry(entry._id);
         },
     },
 };

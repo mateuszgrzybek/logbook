@@ -29,6 +29,14 @@ const store = createStore({
             state.userId = "";
             state.userEntries = [];
         },
+        addUserEntry(state, payload) {
+            const newUserEntryId = payload;
+            state.userEntries.push(newUserEntryId);
+        },
+        deleteUserEntry(state, payload) {
+            const entryToDeleteId = payload;
+            state.userEntries.splice(state.userEntries.indexOf(entryToDeleteId), 1);
+        },
     },
 });
 

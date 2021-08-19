@@ -141,7 +141,11 @@ export default {
         const userId = computed(() => store.state.userId);
         const userEntries = computed(() => store.state.userEntries);
 
-        return { firstName, lastName, userId, userEntries };
+        function addUserEntry(entryId) {
+            store.commit("addUserEntry", entryId);
+        }
+
+        return { firstName, lastName, userId, userEntries, addUserEntry };
     },
     mounted() {
         this.enableCardVisibilityToggle();
@@ -182,7 +186,7 @@ export default {
                     userId: userId,
                 };
                 addUserEntry(payload).then(() => {
-                    this.userEntries.push(newEntryId);
+                    this.addUserEntry(newEntryId);
                     router.go(-1);
                 });
             });
