@@ -80,7 +80,6 @@ export default {
                     router.go(-1);
                 })
                 .catch(error => {
-                    console.log(error.response);
                     if (error.response.status === 409) {
                         this.isRegistrationError = true;
                     }
