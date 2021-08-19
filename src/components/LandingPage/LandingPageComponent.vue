@@ -28,6 +28,7 @@
 <script>
 import { useStore } from "vuex";
 import { computed } from "vue";
+import jwt_decode from "jwt-decode";
 
 export default {
     name: "LandingPage",
@@ -38,7 +39,29 @@ export default {
         const lastName = computed(() => store.state.lastName);
         const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
 
-        return { firstName, lastName, isUserLoggedIn };
+        function userLogIn() {
+            store.commit("userLogIn", {
+                firstName: this.user.firstName,
+                lastName: this.user.lastName,
+                userId: this.user._id,
+                userEntries: this.user.logbookEntries,
+            });
+        }
+
+        return { firstName, lastName, isUserLoggedIn, userLogIn };
+    },
+    data() {
+        return {
+            user: {},
+        };
+    },
+    mounted() {
+        const token = sessionStorage.getItem("jwt");
+        if (token !== null) {
+            const decoded = jwt_decode(token);
+            this.user = decoded;
+            this.userLogIn();
+        }
     },
 };
 </script>

@@ -53,6 +53,7 @@ userSchema.methods.generateAuthToken = async function() {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            logbookEntries: user.logbookEntries,
         },
         "secret"
     );

@@ -38,7 +38,6 @@ import { loginUser } from "../mongo-express-script";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import router from "../../router";
-// import jwt_decode from "jwt-decode";
 
 export default {
     setup() {
@@ -48,16 +47,7 @@ export default {
         const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
         const userId = computed(() => store.state.userId);
 
-        function userLogIn() {
-            store.commit("userLogIn", {
-                firstName: this.user.firstName,
-                lastName: this.user.lastName,
-                userId: this.user._id,
-                userEntries: this.user.logbookEntries,
-            });
-        }
-
-        return { firstName, lastName, isUserLoggedIn, userId, userLogIn };
+        return { firstName, lastName, isUserLoggedIn, userId };
     },
     components: {
         Form,
@@ -83,11 +73,10 @@ export default {
 
             loginUser(loginCredentials)
                 .then(response => {
-                    console.log(response);
-                    sessionStorage.setItem("jwt", response.data.token);
-                    this.user = response.data.user;
-                    this.userLogIn();
-                    router.push({ name: "LandingPage" });
+                    if (response.data.token !== null) {
+                        sessionStorage.setItem("jwt", response.data.token);
+                        router.push({ name: "LandingPage" });
+                    }
                 })
                 .catch(error => {
                     if (error.response.status === 400) {
@@ -95,16 +84,6 @@ export default {
                     }
                 });
         },
-
-        // TODO: Check if code is necessary to use
-        // getUserDetails(token) {
-        //     if (token !== null) {
-        //         let decoded = jwt_decode(token);
-        //         console.log(decoded);
-        //         this.user = decoded;
-        //         console.log(this.user);
-        //     }
-        // },
     },
     watch: {
         login: {
