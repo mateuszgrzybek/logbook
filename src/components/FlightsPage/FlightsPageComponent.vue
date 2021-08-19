@@ -27,50 +27,12 @@
                     <FlightCard :logbookEntry="logbookEntry" @EntryDeleted="updateEntriesArray"></FlightCard>
                 </div>
             </div>
-            <table v-if="isTableView" class="table">
-                <thead>
-                    <tr>
-                        <th><abbr title="Pilot">Pilot's name</abbr></th>
-                        <th><abbr title="Acf. ICAO">Aircraft ICAO</abbr></th>
-                        <th><abbr title="Acf. reg.">Aicraft registration</abbr></th>
-                        <th><abbr title="Dep. ICAO">Departure airport ICAO</abbr></th>
-                        <th><abbr title="Arr. ICAO">Arrival airport ICAO</abbr></th>
-                        <th><abbr title="Dep. time">Departure time</abbr></th>
-                        <th><abbr title="Arr. time">Arrival time</abbr></th>
-                        <th><abbr title="Flt. Time">Flight time</abbr></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="logbookEntry in logbookEntries" :key="logbookEntry._id">
-                        <td>{{ logbookEntry.pilotName }}</td>
-                        <td>{{ logbookEntry.aircraftICAO }}</td>
-                        <td>{{ logbookEntry.aircraftRegistration }}</td>
-                        <td>{{ logbookEntry.depICAO }}</td>
-                        <td>{{ logbookEntry.arrICAO }}</td>
-                        <td>{{ logbookEntry.depTimeZulu }}</td>
-                        <td>{{ logbookEntry.arrTimeZulu }}</td>
-                        <td>{{ logbookEntry.flightTime }}</td>
-                        <td>
-                            <button type="button" class="button" v-on:click="deleteEntry(logbookEntry)">
-                                <span class="icon mr-1">
-                                    <i class="fa fa-trash"></i>
-                                </span>
-                                <span>Delete</span>
-                            </button>
-                        </td>
-                        <td>
-                            <button type="button" class="button">
-                                <span class="icon mr-1">
-                                    <i class="fa fa-pen"></i>
-                                </span>
-                                <span>Edit</span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <FlightsTable
+                :logbookEntries="logbookEntries"
+                :userId="userId"
+                v-if="isTableView"
+                @EntryDeleted="updateEntriesArray"
+            ></FlightsTable>
         </div>
     </section>
 </template>
@@ -78,6 +40,7 @@
 <script>
 import { getAllEntries } from "../mongo-express-script";
 import FlightCard from "./FlightCardComponent.vue";
+import FlightsTable from "./FlightsTableComponent.vue";
 import { useStore } from "vuex";
 import { computed } from "vue";
 
@@ -103,6 +66,7 @@ export default {
     },
     components: {
         FlightCard,
+        FlightsTable,
     },
     mounted() {
         getAllEntries().then(response => {
