@@ -9,7 +9,7 @@ export const createUser = async item => {
         logbookEntries: item.logbookEntries,
     };
     let request = {
-        url: "http://localhost:3000/api/user/register", // domain should be used here in prod build
+        url: "api/user/register", // domain should be used here in prod build
         method: "post",
         headers: {
             "Content-type": "application/json",
@@ -28,7 +28,7 @@ export const loginUser = async item => {
         password: item.password,
     };
     let request = {
-        url: "http://localhost:3000/api/user/login", // domain should be used here in prod build
+        url: "api/user/login", // domain should be used here in prod build
         method: "post",
         headers: {
             "Content-type": "application/json",
@@ -47,7 +47,7 @@ export const addUserEntry = async item => {
         entryId: item.entryId,
     };
     let request = {
-        url: "http://localhost:3000/api/user/addEntry", // domain should be used here in prod build
+        url: "api/user/addEntry", // domain should be used here in prod build
         method: "put",
         headers: {
             "Content-type": "application/json",
@@ -65,7 +65,7 @@ export const deleteUserEntry = async item => {
         entryId: item.entryId,
     };
     let request = {
-        url: "http://localhost:3000/api/user/deleteEntry", // domain should be used here in prod build
+        url: "api/user/deleteEntry", // domain should be used here in prod build
         method: "put",
         headers: {
             "Content-type": "application/json",
@@ -90,7 +90,7 @@ export const createNewEntry = async item => {
         planeSpottersPhotoSource: item.planeSpottersPhotoSource,
     };
     let request = {
-        url: "http://localhost:3000/api/logbook", // domain should be used here in prod build
+        url: "api/logbook", // domain should be used here in prod build
         method: "post",
         headers: {
             "Content-type": "application/json",
@@ -115,7 +115,7 @@ export const updateEntry = async item => {
         planeSpottersPhotoSource: item.planeSpottersPhotoSource,
     };
     let request = {
-        url: "http://localhost:3000/api/logbook/" + item._id, // domain should be used here in prod build
+        url: "api/logbook/" + item._id, // domain should be used here in prod build
         method: "put",
         headers: {
             "Content-type": "application/json",
@@ -129,7 +129,7 @@ export const updateEntry = async item => {
 
 export const getAllEntries = async () => {
     let request = {
-        url: "http://localhost:3000/api/logbook", // domain should be used here in prod build
+        url: "api/logbook", // domain should be used here in prod build
         method: "get",
         headers: {
             "Content-type": "application/json",
@@ -142,7 +142,7 @@ export const getAllEntries = async () => {
 
 export const deleteEntry = async item => {
     let request = {
-        url: "http://localhost:3000/api/logbook/" + item._id, // domain should be used here in prod build
+        url: "api/logbook/" + item._id, // domain should be used here in prod build
         method: "delete",
         headers: {
             "Content-type": "application/json",
@@ -161,7 +161,7 @@ export const addUserAicraftType = async item => {
         aircraftPhoto: item.aircraftPhoto,
     };
     let request = {
-        url: "http://localhost:3000/api/user/addUserAircraftType", // domain should be used here in prod build
+        url: "api/user/addUserAircraftType", // domain should be used here in prod build
         method: "put",
         headers: {
             "Content-type": "application/json",
@@ -181,7 +181,7 @@ export const deleteUserAircraftType = async item => {
         aircraftPhoto: item.aircraftPhoto,
     };
     let request = {
-        url: "http://localhost:3000/api/user/deleteUserAircraftType", // domain should be used here in prod build
+        url: "api/user/deleteUserAircraftType", // domain should be used here in prod build
         method: "put",
         headers: {
             "Content-type": "application/json",

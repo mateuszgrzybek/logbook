@@ -7,5 +7,13 @@ module.exports = {
             return args;
         });
     },
+    devServer: {
+        proxy: {
+            "/api": {
+                target: "http://localhost:3000",
+            },
+        },
+    },
     outputDir: path.resolve(__dirname, "./backend/public"),
+    publicPath: process.env.NODE_ENV === "production" ? "/logbook/" : "/",
 };
