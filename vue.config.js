@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
     chainWebpack: config => {
         config.plugin("html").tap(args => {
@@ -5,4 +7,5 @@ module.exports = {
             return args;
         });
     },
+    outputDir: path.resolve(__dirname, "./backend/public"),
 };
