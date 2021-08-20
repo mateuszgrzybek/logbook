@@ -56,13 +56,17 @@ export default {
             user: {},
         };
     },
-    mounted() {
-        const token = sessionStorage.getItem("jwt");
-        if (token !== null) {
-            const decoded = jwt_decode(token);
-            this.user = decoded;
-            this.userLogIn();
-        }
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (from.name === "Login") {
+                const token = sessionStorage.getItem("jwt");
+                if (token !== null) {
+                    const decoded = jwt_decode(token);
+                    vm.user = decoded;
+                    vm.userLogIn();
+                }
+            }
+        });
     },
 };
 </script>
