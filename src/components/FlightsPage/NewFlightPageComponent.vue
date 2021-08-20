@@ -120,7 +120,7 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { DatePicker } from "v-calendar";
-import { createNewEntry, addUserEntry } from "../mongo-express-script";
+import { createNewEntry, addUserEntry, addUserAicraftType } from "../mongo-express-script";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import router from "../../router";
@@ -140,12 +140,17 @@ export default {
         const lastName = computed(() => store.state.lastName);
         const userId = computed(() => store.state.userId);
         const userEntries = computed(() => store.state.userEntries);
+        const aircraftTypes = computed(() => store.state.aircraftTypes);
 
         function addUserEntry(entryId) {
             store.commit("addUserEntry", entryId);
         }
 
-        return { firstName, lastName, userId, userEntries, addUserEntry };
+        function addAircraftType(aircraftICAO) {
+            store.commit("addAircraftType", aircraftICAO);
+        }
+
+        return { firstName, lastName, userId, userEntries, aircraftTypes, addUserEntry, addAircraftType };
     },
     mounted() {
         this.enableCardVisibilityToggle();
@@ -181,12 +186,33 @@ export default {
             createNewEntry(newEntry).then(response => {
                 const newEntryId = response.data._id;
                 const userId = this.userId;
+                const aircraftICAO = newEntry.aircraftICAO;
+                const aircraftRegistration = newEntry.aircraftRegistration;
+                const aircraftPhoto = newEntry.planeSpottersPhotoSource;
                 const payload = {
                     entryId: newEntryId,
                     userId: userId,
+                    aircraftICAO: aircraftICAO,
+                    aircraftRegistration: aircraftRegistration,
+                    aircraftPhoto: aircraftPhoto,
                 };
                 addUserEntry(payload).then(() => {
                     this.addUserEntry(newEntryId);
+
+                    if (
+                        !this.aircraftTypes.some(
+                            aircraftType =>
+                                aircraftType.aircraftICAO === payload.aircraftICAO &&
+                                aircraftType.aircraftRegistration === payload.aircraftRegistration
+                        )
+                    ) {
+                        addUserAicraftType(payload).then(response => {
+                            if (response.status === 200) {
+                                this.addAircraftType(payload);
+                            }
+                        });
+                    }
+
                     router.go(-1);
                 });
             });

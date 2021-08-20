@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { getAllEntries } from "../mongo-express-script";
+import { getAllEntries, deleteUserAircraftType } from "../mongo-express-script";
 import FlightCard from "./FlightCardComponent.vue";
 import FlightsTable from "./FlightsTableComponent.vue";
 import { useStore } from "vuex";
@@ -54,7 +54,11 @@ export default {
             store.commit("deleteUserEntry", entryId);
         }
 
-        return { userId, userEntries, deleteUserEntry };
+        function deleteAircraftType(aircraftType) {
+            store.commit("deleteAircraftType", aircraftType);
+        }
+
+        return { userId, userEntries, deleteUserEntry, deleteAircraftType };
     },
     name: "FlightsPage",
     data() {
@@ -81,12 +85,36 @@ export default {
     },
     methods: {
         updateEntriesArray(entry) {
+            const payload = {
+                userId: this.userId,
+                aircraftICAO: entry.aircraftICAO,
+                aircraftRegistration: entry.aircraftRegistration,
+                aircraftPhoto: entry.planeSpottersPhotoSource,
+            };
+            console.log(payload.aircraftRegistration);
             this.logbookEntries.splice(this.logbookEntries.indexOf(entry), 1);
             this.deleteUserEntry(entry._id);
+
+            this.manageUserAircraftTypesOnDelete(entry, payload);
         },
         switchView() {
             this.isTableView = !this.isTableView;
             this.changeViewText = this.isTableView ? "Switch to card view" : "Switch to table view";
+        },
+        manageUserAircraftTypesOnDelete(deletedEntry, payload) {
+            const hasEntriesWithMatchingAircraftICAO = this.logbookEntries.some(
+                logbookEntry =>
+                    logbookEntry.aircraftICAO === deletedEntry.aircraftICAO &&
+                    logbookEntry.aircraftRegistration === deletedEntry.aircraftRegistration
+            );
+
+            if (!hasEntriesWithMatchingAircraftICAO) {
+                deleteUserAircraftType(payload).then(response => {
+                    if (response.status === 200) {
+                        this.deleteAircraftType(payload);
+                    }
+                });
+            }
         },
     },
 };

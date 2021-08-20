@@ -8,6 +8,8 @@ const auth = require("../config/auth");
 // /api/user/getUser GET
 // /api/user/addEntry PUT
 // /api/user/deleteEntry PUT
+// /api/user/addAircraftType PUT
+// /api/user/deleteAircraftType PUT
 
 // Register new user
 router.post("/register", userController.registerNewUser);
@@ -23,5 +25,11 @@ router.put("/addEntry", userController.addUserEntry);
 
 // Delete user entry
 router.put("/deleteEntry", userController.deleteUserEntry);
+
+// Add new aircraft type for user
+router.put("/addUserAircraftType", userController.addUserAircraftType);
+
+// Delete user's aircraft type
+router.put("/deleteUserAircraftType", userController.deleteUserAircraftType);
 
 module.exports = router;

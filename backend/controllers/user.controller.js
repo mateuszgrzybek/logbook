@@ -1,5 +1,7 @@
 const User = require("../models/user.model");
 
+// Registration and Log-in process
+
 exports.registerNewUser = async (req, res) => {
     try {
         const user = new User({
@@ -8,6 +10,7 @@ exports.registerNewUser = async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             logbookEntries: req.body.logbookEntries,
+            aircraftTypes: req.body.aircraftTypes,
         });
         User.findOne({ email: user.email }).then(async response => {
             if (response) {
@@ -38,6 +41,8 @@ exports.loginUser = async (req, res) => {
     }
 };
 
+// User logbook entries
+
 exports.addUserEntry = async (req, res) => {
     const userId = req.body.userId;
     const entryId = req.body.entryId;
@@ -67,6 +72,52 @@ exports.deleteUserEntry = async (req, res) => {
                 });
             } else {
                 res.json("User entries have been updated.");
+            }
+        })
+        .catch(err => {
+            res.status(500).json(`Error ${err}`);
+        });
+};
+
+// User aircraft types
+
+exports.addUserAircraftType = async (req, res) => {
+    const userId = req.body.userId;
+    const aircraftType = {
+        aircraftICAO: req.body.aircraftICAO,
+        aircraftRegistration: req.body.aircraftRegistration,
+        aircraftPhoto: req.body.aircraftPhoto,
+    };
+    User.findByIdAndUpdate(userId, { $addToSet: { aircraftTypes: aircraftType } }, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).json({
+                    message: `Cannot update a user with id=${userId}.`,
+                });
+            } else {
+                res.json("Aircraft types have been updated.");
+            }
+        })
+        .catch(err => {
+            res.status(500).json(`Error ${err}`);
+        });
+};
+
+exports.deleteUserAircraftType = async (req, res) => {
+    const userId = req.body.userId;
+    const aircraftType = {
+        aircraftICAO: req.body.aircraftICAO,
+        aircraftRegistration: req.body.aircraftRegistration,
+        aircraftPhoto: req.body.aircraftPhoto,
+    };
+    User.findByIdAndUpdate(userId, { $pull: { aircraftTypes: aircraftType } }, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).json({
+                    message: `Cannot update a user with id=${userId}.`,
+                });
+            } else {
+                res.json("Aircraft types have been updated.");
             }
         })
         .catch(err => {
