@@ -16,6 +16,7 @@ const store = createStore({
         aircraftTypes: [
             {
                 aircraftICAO: String,
+                aircraftRegistration: String,
                 aircraftPhoto: String,
             },
         ],
@@ -48,6 +49,7 @@ const store = createStore({
         addAircraftType(state, payload) {
             const newEntryAircraftType = {
                 aircraftICAO: payload.aircraftICAO,
+                aircraftRegistration: payload.aircraftRegistration,
                 aircraftPhoto: payload.aircraftPhoto,
             };
             state.aircraftTypes.push(newEntryAircraftType);
@@ -55,9 +57,15 @@ const store = createStore({
         deleteAircraftType(state, payload) {
             const deletedEntryAircraftType = {
                 aircraftICAO: payload.aircraftICAO,
+                aircraftRegistration: payload.aircraftRegistration,
                 aircraftPhoto: payload.aircraftPhoto,
             };
-            state.aircraftTypes.splice(state.aircraftTypes.indexOf(deletedEntryAircraftType), 1);
+            const matchingIndex = state.aircraftTypes.findIndex(
+                aircraftType =>
+                    aircraftType.aircraftICAO === deletedEntryAircraftType.aircraftICAO &&
+                    aircraftType.aircraftRegistration === deletedEntryAircraftType.aircraftRegistration
+            );
+            state.aircraftTypes.splice(matchingIndex, 1);
         },
     },
 });

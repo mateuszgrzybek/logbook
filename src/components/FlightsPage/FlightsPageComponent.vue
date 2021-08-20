@@ -88,8 +88,10 @@ export default {
             const payload = {
                 userId: this.userId,
                 aircraftICAO: entry.aircraftICAO,
+                aircraftRegistration: entry.aircraftRegistration,
                 aircraftPhoto: entry.planeSpottersPhotoSource,
             };
+            console.log(payload.aircraftRegistration);
             this.logbookEntries.splice(this.logbookEntries.indexOf(entry), 1);
             this.deleteUserEntry(entry._id);
 
@@ -99,10 +101,13 @@ export default {
             this.isTableView = !this.isTableView;
             this.changeViewText = this.isTableView ? "Switch to card view" : "Switch to table view";
         },
-        manageUserAircraftTypesOnDelete(entry, payload) {
+        manageUserAircraftTypesOnDelete(deletedEntry, payload) {
             const hasEntriesWithMatchingAircraftICAO = this.logbookEntries.some(
-                logbookEntry => logbookEntry.aircraftICAO === entry.aircraftICAO
+                logbookEntry =>
+                    logbookEntry.aircraftICAO === deletedEntry.aircraftICAO &&
+                    logbookEntry.aircraftRegistration === deletedEntry.aircraftRegistration
             );
+
             if (!hasEntriesWithMatchingAircraftICAO) {
                 deleteUserAircraftType(payload).then(response => {
                     if (response.status === 200) {

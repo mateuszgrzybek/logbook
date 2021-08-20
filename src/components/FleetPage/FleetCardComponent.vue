@@ -4,7 +4,10 @@
             <figure class="image is-4by3">
                 <img :src="aircraftType.aircraftPhoto" alt="Aircraft image" />
             </figure>
-            <h1 class="title has-text-white card-icao">{{ aircraftType.aircraftICAO }}</h1>
+            <div class="card-aircraft-info">
+                <h1 class="title has-text-white card-icao">{{ aircraftType.aircraftICAO }}</h1>
+                <h2 class="subtitle has-text-white card-icao">{{ aircraftType.aircraftRegistration }}</h2>
+            </div>
         </div>
     </div>
 </template>
@@ -24,13 +27,14 @@ export default {
 
     .card-image {
         img {
-            filter: blur(2px) brightness(0.5);
+            filter: blur(1px) brightness(0.7);
         }
 
-        .card-icao {
+        .card-aircraft-info {
             position: absolute;
             top: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             width: 100%;

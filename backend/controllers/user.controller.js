@@ -85,6 +85,7 @@ exports.addUserAircraftType = async (req, res) => {
     const userId = req.body.userId;
     const aircraftType = {
         aircraftICAO: req.body.aircraftICAO,
+        aircraftRegistration: req.body.aircraftRegistration,
         aircraftPhoto: req.body.aircraftPhoto,
     };
     User.findByIdAndUpdate(userId, { $addToSet: { aircraftTypes: aircraftType } }, { useFindAndModify: false })
@@ -106,6 +107,7 @@ exports.deleteUserAircraftType = async (req, res) => {
     const userId = req.body.userId;
     const aircraftType = {
         aircraftICAO: req.body.aircraftICAO,
+        aircraftRegistration: req.body.aircraftRegistration,
         aircraftPhoto: req.body.aircraftPhoto,
     };
     User.findByIdAndUpdate(userId, { $pull: { aircraftTypes: aircraftType } }, { useFindAndModify: false })

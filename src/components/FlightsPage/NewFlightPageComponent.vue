@@ -187,11 +187,13 @@ export default {
                 const newEntryId = response.data._id;
                 const userId = this.userId;
                 const aircraftICAO = newEntry.aircraftICAO;
+                const aircraftRegistration = newEntry.aircraftRegistration;
                 const aircraftPhoto = newEntry.planeSpottersPhotoSource;
                 const payload = {
                     entryId: newEntryId,
                     userId: userId,
                     aircraftICAO: aircraftICAO,
+                    aircraftRegistration: aircraftRegistration,
                     aircraftPhoto: aircraftPhoto,
                 };
                 addUserEntry(payload).then(() => {
@@ -200,7 +202,8 @@ export default {
                     if (
                         !this.aircraftTypes.some(
                             aircraftType =>
-                                aircraftType.aircraftICAO === payload.aircraftICAO && aircraftType.aircraftPhoto === payload.aircraftPhoto
+                                aircraftType.aircraftICAO === payload.aircraftICAO &&
+                                aircraftType.aircraftRegistration === payload.aircraftRegistration
                         )
                     ) {
                         addUserAicraftType(payload).then(response => {

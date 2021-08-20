@@ -157,6 +157,7 @@ export const addUserAicraftType = async item => {
     let data = {
         userId: item.userId,
         aircraftICAO: item.aircraftICAO,
+        aircraftRegistration: item.aircraftRegistration,
         aircraftPhoto: item.aircraftPhoto,
     };
     let request = {
@@ -176,6 +177,7 @@ export const deleteUserAircraftType = async item => {
     let data = {
         userId: item.userId,
         aircraftICAO: item.aircraftICAO,
+        aircraftRegistration: item.aircraftRegistration,
         aircraftPhoto: item.aircraftPhoto,
     };
     let request = {
