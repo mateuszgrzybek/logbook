@@ -45,6 +45,7 @@ export default {
                 lastName: this.user.lastName,
                 userId: this.user._id,
                 userEntries: this.user.logbookEntries,
+                aircraftTypes: this.user.aircraftTypes,
             });
         }
 

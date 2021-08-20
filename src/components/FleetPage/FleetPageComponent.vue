@@ -10,9 +10,9 @@
             <h2 v-if="!aircraftTypes.length" class="subtitle has-text-white">
                 You haven't logged any flights yet, thus no aircraft can be displayed as part of your fleet.
             </h2>
-            <div v-if="aircraftTypes.length">
-                <div v-for="aircraftType in aircraftTypes" :key="aircraftType">
-                    <p class="has-text-white">{{ aircraftType }}</p>
+            <div v-if="aircraftTypes.length" class="columns is-multiline">
+                <div v-for="aircraftType in aircraftTypes" :key="aircraftType" class="column is-one-third mb-6">
+                    <FleetCard :aircraftType="aircraftType"></FleetCard>
                 </div>
             </div>
         </div>
@@ -22,9 +22,13 @@
 <script>
 import { useStore } from "vuex";
 import { computed } from "vue";
+import FleetCard from "./FleetCardComponent.vue";
 
 export default {
     name: "FleetPage",
+    components: {
+        FleetCard,
+    },
     setup() {
         const store = useStore();
         const aircraftTypes = computed(() => store.state.aircraftTypes);

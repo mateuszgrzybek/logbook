@@ -13,7 +13,12 @@ const store = createStore({
         lastName: "",
         userId: "",
         userEntries: [],
-        aircraftTypes: [],
+        aircraftTypes: [
+            {
+                aircraftICAO: String,
+                aircraftPhoto: String,
+            },
+        ],
     },
     mutations: {
         userLogIn(state, payload) {
@@ -41,11 +46,17 @@ const store = createStore({
             state.userEntries.splice(state.userEntries.indexOf(entryToDeleteId), 1);
         },
         addAircraftType(state, payload) {
-            const newEntryAircraftType = payload;
+            const newEntryAircraftType = {
+                aircraftICAO: payload.aircraftICAO,
+                aircraftPhoto: payload.aircraftPhoto,
+            };
             state.aircraftTypes.push(newEntryAircraftType);
         },
         deleteAircraftType(state, payload) {
-            const deletedEntryAircraftType = payload;
+            const deletedEntryAircraftType = {
+                aircraftICAO: payload.aircraftICAO,
+                aircraftPhoto: payload.aircraftPhoto,
+            };
             state.aircraftTypes.splice(state.aircraftTypes.indexOf(deletedEntryAircraftType), 1);
         },
     },

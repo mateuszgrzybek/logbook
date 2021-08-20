@@ -152,3 +152,41 @@ export const deleteEntry = async item => {
     const response = await axios(request);
     return response;
 };
+
+export const addUserAicraftType = async item => {
+    let data = {
+        userId: item.userId,
+        aircraftICAO: item.aircraftICAO,
+        aircraftPhoto: item.aircraftPhoto,
+    };
+    let request = {
+        url: "http://localhost:3000/api/user/addUserAircraftType", // domain should be used here in prod build
+        method: "put",
+        headers: {
+            "Content-type": "application/json",
+        },
+        data: JSON.stringify(data),
+    };
+
+    const response = await axios(request);
+    return response;
+};
+
+export const deleteUserAircraftType = async item => {
+    let data = {
+        userId: item.userId,
+        aircraftICAO: item.aircraftICAO,
+        aircraftPhoto: item.aircraftPhoto,
+    };
+    let request = {
+        url: "http://localhost:3000/api/user/deleteUserAircraftType", // domain should be used here in prod build
+        method: "put",
+        headers: {
+            "Content-type": "application/json",
+        },
+        data: JSON.stringify(data),
+    };
+
+    const response = await axios(request);
+    return response;
+};

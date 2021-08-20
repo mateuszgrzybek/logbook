@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { getAllEntries } from "../mongo-express-script";
+import { getAllEntries, deleteUserAircraftType } from "../mongo-express-script";
 import FlightCard from "./FlightCardComponent.vue";
 import FlightsTable from "./FlightsTableComponent.vue";
 import { useStore } from "vuex";
@@ -54,8 +54,8 @@ export default {
             store.commit("deleteUserEntry", entryId);
         }
 
-        function deleteAircraftType(aircraftICAO) {
-            store.commit("deleteAircraftType", aircraftICAO);
+        function deleteAircraftType(aircraftType) {
+            store.commit("deleteAircraftType", aircraftType);
         }
 
         return { userId, userEntries, deleteUserEntry, deleteAircraftType };
@@ -85,22 +85,31 @@ export default {
     },
     methods: {
         updateEntriesArray(entry) {
+            const payload = {
+                userId: this.userId,
+                aircraftICAO: entry.aircraftICAO,
+                aircraftPhoto: entry.planeSpottersPhotoSource,
+            };
             this.logbookEntries.splice(this.logbookEntries.indexOf(entry), 1);
             this.deleteUserEntry(entry._id);
 
-            let entriesWithMatchingAircraftICAO = 0;
-            this.logbookEntries.forEach(logbookEntry => {
-                if (logbookEntry.aircraftICAO === entry.aircraftICAO) {
-                    entriesWithMatchingAircraftICAO++;
-                }
-            });
-            if (entriesWithMatchingAircraftICAO === 0) {
-                this.deleteAircraftType(entry.aircraftICAO);
-            }
+            this.manageUserAircraftTypesOnDelete(entry, payload);
         },
         switchView() {
             this.isTableView = !this.isTableView;
             this.changeViewText = this.isTableView ? "Switch to card view" : "Switch to table view";
+        },
+        manageUserAircraftTypesOnDelete(entry, payload) {
+            const hasEntriesWithMatchingAircraftICAO = this.logbookEntries.some(
+                logbookEntry => logbookEntry.aircraftICAO === entry.aircraftICAO
+            );
+            if (!hasEntriesWithMatchingAircraftICAO) {
+                deleteUserAircraftType(payload).then(response => {
+                    if (response.status === 200) {
+                        this.deleteAircraftType(payload);
+                    }
+                });
+            }
         },
     },
 };

@@ -27,9 +27,9 @@ router.put("/addEntry", userController.addUserEntry);
 router.put("/deleteEntry", userController.deleteUserEntry);
 
 // Add new aircraft type for user
-router.put("/addAircraftType", userController.addUserAircraftType);
+router.put("/addUserAircraftType", userController.addUserAircraftType);
 
 // Delete user's aircraft type
-router.put("/deleteAircraftType", userController.deleteUserAircraftType);
+router.put("/deleteUserAircraftType", userController.deleteUserAircraftType);
 
 module.exports = router;
