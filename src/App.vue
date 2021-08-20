@@ -1,6 +1,6 @@
 <template>
     <Slideshow></Slideshow>
-    <Navbar :isUserLoggedIn="isUserLoggedIn"></Navbar>
+    <Navbar :isUserLoggedIn="isUserLoggedIn" :firstName="firstName" :lastName="lastName"></Navbar>
     <router-view />
 </template>
 

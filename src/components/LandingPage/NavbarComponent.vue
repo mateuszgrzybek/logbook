@@ -4,7 +4,10 @@
             <div class="top-fade-overlay"></div>
             <div class="navbar-brand">
                 <a class="navbar-item" href="../">
-                    Logbook
+                    <span v-if="!isUserLoggedIn">
+                        Logbook Anywhere
+                    </span>
+                    <span v-if="isUserLoggedIn">{{ logbookIdentifier }}</span>
                 </a>
                 <span class="navbar-burger burger" data-target="navbarMenu">
                     <span></span>
@@ -53,6 +56,7 @@ export default {
     data() {
         return {
             topFadeOverlay: Element,
+            logbookIdentifier: String,
         };
     },
     methods: {
@@ -73,8 +77,11 @@ export default {
     },
     props: {
         isUserLoggedIn: Boolean,
+        firstName: String,
+        lastName: String,
     },
     mounted() {
+        this.logbookIdentifier = `${this.firstName} ${this.lastName}'s`;
         this.topFadeOverlay = document.querySelector(".top-fade-overlay");
         window.addEventListener("scroll", this.scrollHandler);
     },
