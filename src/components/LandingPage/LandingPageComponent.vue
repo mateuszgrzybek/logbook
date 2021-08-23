@@ -29,6 +29,7 @@
 import { useStore } from "vuex";
 import { computed } from "vue";
 import jwt_decode from "jwt-decode";
+import Swal from "sweetalert2";
 
 export default {
     name: "LandingPage",
@@ -65,6 +66,20 @@ export default {
                     vm.user = decoded;
                     vm.userLogIn();
                 }
+            }
+            if (from.name === "Register") {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "bottom-end",
+                    showConfirmButton: false,
+                    timer: 10000,
+                    timerProgressBar: true,
+                });
+                Toast.fire({
+                    title: "Registration complete",
+                    text: "You can now log in with the provided credentials",
+                    icon: "success",
+                });
             }
         });
     },

@@ -4,10 +4,9 @@
             <div class="top-fade-overlay"></div>
             <div class="navbar-brand">
                 <a class="navbar-item" href="../">
-                    <span v-if="!isUserLoggedIn">
+                    <span>
                         Logbook Anywhere
                     </span>
-                    <span v-if="isUserLoggedIn">{{ logbookIdentifier }}</span>
                 </a>
                 <span class="navbar-burger burger" data-target="navbarMenu">
                     <span></span>
@@ -38,6 +37,7 @@
 <script>
 import NavButton from "./NavButtonComponent.vue";
 import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
     name: "Navbar",
@@ -46,12 +46,15 @@ export default {
     },
     setup() {
         const store = useStore();
+        const firstName = computed(() => store.state.firstName);
+        const lastName = computed(() => store.state.lastName);
+        const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
 
         function userLogOut() {
             store.commit("userLogOut");
         }
 
-        return { userLogOut };
+        return { firstName, lastName, isUserLoggedIn, userLogOut };
     },
     data() {
         return {
@@ -75,13 +78,7 @@ export default {
             this.userLogOut();
         },
     },
-    props: {
-        isUserLoggedIn: Boolean,
-        firstName: String,
-        lastName: String,
-    },
     mounted() {
-        this.logbookIdentifier = `${this.firstName} ${this.lastName}'s`;
         this.topFadeOverlay = document.querySelector(".top-fade-overlay");
         window.addEventListener("scroll", this.scrollHandler);
     },

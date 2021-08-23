@@ -59,7 +59,12 @@ userSchema.methods.generateAuthToken = async function() {
         },
         "secret"
     );
+
+    if (user.tokens.length) {
+        user.tokens.splice(0, user.tokens.length);
+    }
     user.tokens = user.tokens.concat({ token });
+
     await user.save();
 
     return token;

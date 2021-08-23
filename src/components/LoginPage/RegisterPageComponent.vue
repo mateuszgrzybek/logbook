@@ -82,7 +82,7 @@ export default {
                 .then(response => {
                     sessionStorage.setItem("jwt", response.data.token);
                     console.log("Success");
-                    router.go(-1);
+                    router.push({ name: "LandingPage" });
                 })
                 .catch(error => {
                     if (error.response.status === 409) {
