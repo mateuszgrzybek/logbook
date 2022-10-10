@@ -4,15 +4,21 @@ Web based flight logbook solution. Currently in initial version, which allows us
 
 ### Tech stack
 
+Running on Docker and Docker-compose
+
 -   Backend - Node.js Express Framework 🏎️
 -   Frontend - Vue 3 🖖, Sass 🖌️
 -   Database - MongoDB 🥭 🍃
 
 ### Local development setup 101
 
-1. Copy `.env.sample` and remove the `.sample` part
-2. Set the connection string according to your MongoDB setup
-3. Run `yarn install` in both the main directory and the backend subdirectory
-4. Stand in `backend` and run `npm run start`
-5. Stand in the main directory and run `npm run serve`
-6. Both the server and the front-end are now up and running
+1. Make sure you are in the repo's root directory
+2. Either run `MONGO_DB_USER=username MONGO_DB_PASS=password MONGO_DB_CLUSTER=clusterName docker compose up -d`, and make sure to replace `username`, `password` and `clusterName` with your corresponding MongoDB credentials.
+   <br>
+   **OR**
+   <br>
+   Open `docker-compose.yml` and in the `backend` service part edit the environment variables to match your MongoDB credentials, then run `docker-compose up -d`
+
+### Assets used
+
+All assets used are under Creative Commons license

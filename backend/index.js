@@ -24,7 +24,7 @@ db.mongoose
     .then(() => {
         console.log("Database Connection has been established.");
     })
-    .catch(err => {
+    .catch((err) => {
         console.log("[Error] Couldn't establish a database connection.", err);
         process.exit();
     });
