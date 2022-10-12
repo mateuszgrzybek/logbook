@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-import LandingPage from "../components/LandingPage/LandingPageComponent.vue";
+import Home from "../components/Main/HomeComponent.vue";
 import FlightsPage from "../components/FlightsPage/FlightsPageComponent.vue";
 import FleetPage from "../components/FleetPage/FleetPageComponent.vue";
 import NewFlightPage from "../components/FlightsPage/NewFlightPageComponent.vue";
@@ -9,8 +9,8 @@ import RegisterPage from "../components/LoginPage/RegisterPageComponent.vue";
 const routes = [
     {
         path: "/",
-        name: "LandingPage",
-        component: LandingPage,
+        name: "Home",
+        component: Home,
         props: true,
     },
     {
@@ -56,7 +56,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
         if (sessionStorage.getItem("jwt") === null) {
             next({
                 path: "/",

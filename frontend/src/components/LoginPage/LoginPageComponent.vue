@@ -72,13 +72,13 @@ export default {
             };
 
             loginUser(loginCredentials)
-                .then(response => {
+                .then((response) => {
                     if (response.data.token !== null) {
                         sessionStorage.setItem("jwt", response.data.token);
-                        router.push({ name: "LandingPage" });
+                        router.push({ name: "Home" });
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     if (error.response.status === 400) {
                         this.isLoginError = true;
                     }

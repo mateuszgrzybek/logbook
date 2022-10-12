@@ -1,5 +1,5 @@
 <template>
-    <section class="hero is-info is-fullheight-with-navbar">
+    <!-- <section class="hero is-info is-fullheight-with-navbar">
         <div class="hero-body">
             <div class="container has-text-centered">
                 <div v-if="!isUserLoggedIn" class="column is-6 is-offset-3">
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 </template>
 
 <script>
@@ -31,7 +31,7 @@ import { computed } from "vue";
 import jwt_decode from "jwt-decode";
 
 export default {
-    name: "LandingPage",
+    name: "HomePage",
     components: {},
     setup() {
         const store = useStore();
@@ -57,7 +57,7 @@ export default {
         };
     },
     beforeRouteEnter(to, from, next) {
-        next(vm => {
+        next((vm) => {
             if (from.name === "Login") {
                 const token = sessionStorage.getItem("jwt");
                 if (token !== null) {
@@ -72,16 +72,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.hero.is-info {
-    background-color: transparent;
-}
-.hero .nav,
-.hero.is-success .nav {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-.hero .subtitle {
-    padding: 3rem 0;
-    line-height: 1.5;
-}
+// .hero.is-info {
+//     background-color: transparent;
+// }
+// .hero .nav,
+// .hero.is-success .nav {
+//     -webkit-box-shadow: none;
+//     box-shadow: none;
+// }
+// .hero .subtitle {
+//     padding: 3rem 0;
+//     line-height: 1.5;
+// }
 </style>

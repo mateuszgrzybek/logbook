@@ -1,28 +1,31 @@
 <template>
-    <Slideshow></Slideshow>
-    <Navbar :isUserLoggedIn="isUserLoggedIn" :firstName="firstName" :lastName="lastName"></Navbar>
-    <router-view />
+    <VApp>
+        <SideBar :isUserLoggedIn="isUserLoggedIn" :firstName="firstName" :lastName="lastName" :email="email"></SideBar>
+        <VMain>
+            <router-view />
+            <!-- main content -->
+        </VMain>
+    </VApp>
 </template>
 
 <script>
 import { useStore } from "vuex";
 import { computed } from "vue";
-import Slideshow from "./components/LandingPage/SlideshowComponent.vue";
-import Navbar from "./components/LandingPage/NavbarComponent.vue";
+import SideBar from "./components/Main/SideBarComponent.vue";
 
 export default {
     name: "App",
     components: {
-        Slideshow,
-        Navbar,
+        SideBar,
     },
     setup() {
         const store = useStore();
         const firstName = computed(() => store.state.firstName);
         const lastName = computed(() => store.state.lastName);
+        const email = computed(() => store.state.email);
         const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
 
-        return { firstName, lastName, isUserLoggedIn };
+        return { firstName, lastName, email, isUserLoggedIn };
     },
 };
 </script>
