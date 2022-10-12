@@ -39,6 +39,7 @@ import { useStore } from "vuex";
 import { computed, ref } from "vue";
 import jwt_decode from "jwt-decode";
 import router from "../../router";
+import handleCookie from "../../helpers/cookieHelper";
 
 export default {
     setup() {
@@ -72,6 +73,7 @@ export default {
                             userEntries: user.logbookEntries,
                             aircraftTypes: user.aircraftTypes,
                         });
+                        handleCookie.write("token", response.data.token);
                         router.push({ name: "Home" });
                     }
                 })
@@ -81,6 +83,7 @@ export default {
                     }
                 });
         };
+
         return { firstName, lastName, isUserLoggedIn, userId, loginUserAsync, login, isLoginError };
     },
     components: {

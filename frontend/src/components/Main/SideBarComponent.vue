@@ -25,6 +25,7 @@
 
 <script>
 import { useStore } from "vuex";
+import handleCookie from "../../helpers/cookieHelper";
 
 export default {
     name: "SideBar",
@@ -40,6 +41,7 @@ export default {
         const logUserOut = () => {
             store.commit("userLogOut");
             sessionStorage.clear();
+            handleCookie.delete("token");
         };
 
         return { logUserOut };

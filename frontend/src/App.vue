@@ -2,9 +2,14 @@
     <VApp>
         <SideBar :isUserLoggedIn="isUserLoggedIn" :firstName="firstName" :lastName="lastName" :email="email"></SideBar>
         <VMain>
-            <SlideShow></SlideShow>
-            <router-view />
-            <!-- main content -->
+            <v-parallax dark :src="parallaxImage">
+                <v-row align="center" justify="center">
+                    <v-col class="text-center" cols="12">
+                        <router-view />
+                        <!-- main content -->
+                    </v-col>
+                </v-row>
+            </v-parallax>
         </VMain>
     </VApp>
 </template>
@@ -28,7 +33,9 @@ export default {
         const email = computed(() => store.state.email);
         const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
 
-        return { firstName, lastName, email, isUserLoggedIn };
+        const parallaxImage = new URL("./assets/images/unsplash_landing_cover2.jpg", import.meta.url).href;
+
+        return { firstName, lastName, email, isUserLoggedIn, parallaxImage };
     },
 };
 </script>

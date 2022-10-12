@@ -5,6 +5,7 @@ import FleetPage from "../components/FleetPage/FleetPageComponent.vue";
 import NewFlightPage from "../components/FlightsPage/NewFlightPageComponent.vue";
 import LoginPage from "../components/LoginPage/LoginPageComponent.vue";
 import RegisterPage from "../components/LoginPage/RegisterPageComponent.vue";
+import handleCookie from "../helpers/cookieHelper";
 
 const routes = [
     {
@@ -58,7 +59,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         // temporary, switch to cookies later (adjust backend to support it)
-        if (sessionStorage.getItem("vuex") === null) {
+        if (!handleCookie.read(document.cookie).token) {
             next({
                 path: "/",
             });
