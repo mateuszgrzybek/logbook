@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <section class="section is-info is-fullheight is-flex is-align-items-center is-flex-direction-column">
-            <Form @submit="loginUser" class="column is-flex is-flex-direction-column is-5-desktop is-5-tablet is-12-mobile">
+            <Form @submit="loginUserAsync" class="column is-flex is-flex-direction-column is-5-desktop is-5-tablet is-12-mobile">
                 <div class="input-wrapper mb-5">
                     <label for="email" class="title is-6 has-text-white">Email address</label>
                     <Field rules="email" name="email" class="input" v-model="login.email" />
@@ -36,7 +36,8 @@
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { loginUser } from "../mongo-express-script";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import jwt_decode from "jwt-decode";
 import router from "../../router";
 
 export default {
@@ -47,51 +48,45 @@ export default {
         const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
         const userId = computed(() => store.state.userId);
 
-        return { firstName, lastName, isUserLoggedIn, userId };
-    },
-    components: {
-        Form,
-        Field,
-        ErrorMessage,
-    },
-    data() {
-        return {
-            login: {
-                email: "",
-                password: "",
-            },
-            user: {},
-            isLoginError: false,
+        const login = {
+            email: "",
+            password: "",
         };
-    },
-    methods: {
-        async loginUser() {
+        const isLoginError = ref(false);
+
+        const loginUserAsync = async () => {
             const loginCredentials = {
-                email: this.login.email,
-                password: this.login.password,
+                email: login.email,
+                password: login.password,
             };
 
             loginUser(loginCredentials)
                 .then((response) => {
                     if (response.data.token !== null) {
-                        sessionStorage.setItem("jwt", response.data.token);
+                        const user = jwt_decode(response.data.token);
+                        store.commit("userLogIn", {
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            email: user.email,
+                            userId: user._id,
+                            userEntries: user.logbookEntries,
+                            aircraftTypes: user.aircraftTypes,
+                        });
                         router.push({ name: "Home" });
                     }
                 })
                 .catch((error) => {
                     if (error.response.status === 400) {
-                        this.isLoginError = true;
+                        isLoginError.value = true;
                     }
                 });
-        },
+        };
+        return { firstName, lastName, isUserLoggedIn, userId, loginUserAsync, login, isLoginError };
     },
-    watch: {
-        login: {
-            deep: true,
-            handler() {
-                this.isLoginError = false;
-            },
-        },
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
     },
 };
 </script>

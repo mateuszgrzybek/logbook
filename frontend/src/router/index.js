@@ -57,7 +57,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
-        if (sessionStorage.getItem("jwt") === null) {
+        // temporary, switch to cookies later (adjust backend to support it)
+        if (sessionStorage.getItem("vuex") === null) {
             next({
                 path: "/",
             });

@@ -2,6 +2,7 @@
     <VApp>
         <SideBar :isUserLoggedIn="isUserLoggedIn" :firstName="firstName" :lastName="lastName" :email="email"></SideBar>
         <VMain>
+            <SlideShow></SlideShow>
             <router-view />
             <!-- main content -->
         </VMain>
@@ -12,11 +13,13 @@
 import { useStore } from "vuex";
 import { computed } from "vue";
 import SideBar from "./components/Main/SideBarComponent.vue";
+import SlideShow from "./components/Main/SlideshowComponent.vue";
 
 export default {
     name: "App",
     components: {
         SideBar,
+        SlideShow,
     },
     setup() {
         const store = useStore();

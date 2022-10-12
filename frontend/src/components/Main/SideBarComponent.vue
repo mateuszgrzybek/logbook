@@ -15,7 +15,7 @@
                 <VListItem prepend-icon="" title="Register" value="register" :to="{ name: 'Register' }"></VListItem>
             </template>
             <template v-else>
-                <VListItem prepend-icon="" title="Log out" value="log out"></VListItem>
+                <VListItem prepend-icon="" title="Log out" value="log out" @click="logUserOut"></VListItem>
                 <VListItem prepend-icon="" title="Flights" value="flights" :to="{ name: 'Flights' }"></VListItem>
                 <VListItem prepend-icon="" title="Fleet" value="fleet" :to="{ name: 'Fleet' }"></VListItem>
             </template>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
+
 export default {
     name: "SideBar",
     props: {
@@ -33,7 +35,15 @@ export default {
         email: String,
     },
     components: {},
-    setup() {},
+    setup() {
+        const store = useStore();
+        const logUserOut = () => {
+            store.commit("userLogOut");
+            sessionStorage.clear();
+        };
+
+        return { logUserOut };
+    },
 };
 </script>
 
