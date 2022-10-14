@@ -1,16 +1,17 @@
 import { createWebHistory, createRouter } from "vue-router";
-import LandingPage from "../components/LandingPage/LandingPageComponent.vue";
+import Home from "../components/Main/HomeComponent.vue";
 import FlightsPage from "../components/FlightsPage/FlightsPageComponent.vue";
 import FleetPage from "../components/FleetPage/FleetPageComponent.vue";
 import NewFlightPage from "../components/FlightsPage/NewFlightPageComponent.vue";
 import LoginPage from "../components/LoginPage/LoginPageComponent.vue";
 import RegisterPage from "../components/LoginPage/RegisterPageComponent.vue";
+import handleCookie from "../helpers/cookieHelper";
 
 const routes = [
     {
         path: "/",
-        name: "LandingPage",
-        component: LandingPage,
+        name: "Home",
+        component: Home,
         props: true,
     },
     {
@@ -56,8 +57,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (sessionStorage.getItem("jwt") === null) {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        // temporary, switch to cookies later (adjust backend to support it)
+        if (!handleCookie.read(document.cookie).token) {
             next({
                 path: "/",
             });

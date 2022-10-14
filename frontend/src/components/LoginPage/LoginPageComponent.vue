@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <section class="section is-info is-fullheight is-flex is-align-items-center is-flex-direction-column">
-            <Form @submit="loginUser" class="column is-flex is-flex-direction-column is-5-desktop is-5-tablet is-12-mobile">
+            <Form @submit="loginUserAsync" class="column is-flex is-flex-direction-column is-5-desktop is-5-tablet is-12-mobile">
                 <div class="input-wrapper mb-5">
                     <label for="email" class="title is-6 has-text-white">Email address</label>
                     <Field rules="email" name="email" class="input" v-model="login.email" />
@@ -36,8 +36,10 @@
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { loginUser } from "../mongo-express-script";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import jwt_decode from "jwt-decode";
 import router from "../../router";
+import handleCookie from "../../helpers/cookieHelper";
 
 export default {
     setup() {
@@ -47,51 +49,47 @@ export default {
         const isUserLoggedIn = computed(() => store.state.isUserLoggedIn);
         const userId = computed(() => store.state.userId);
 
-        return { firstName, lastName, isUserLoggedIn, userId };
+        const login = {
+            email: "",
+            password: "",
+        };
+        const isLoginError = ref(false);
+
+        const loginUserAsync = async () => {
+            const loginCredentials = {
+                email: login.email,
+                password: login.password,
+            };
+
+            loginUser(loginCredentials)
+                .then((response) => {
+                    if (response.data.token !== null) {
+                        const user = jwt_decode(response.data.token);
+                        store.commit("userLogIn", {
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            email: user.email,
+                            userId: user._id,
+                            userEntries: user.logbookEntries,
+                            aircraftTypes: user.aircraftTypes,
+                        });
+                        handleCookie.write("token", response.data.token);
+                        router.push({ name: "Home" });
+                    }
+                })
+                .catch((error) => {
+                    if (error.response.status === 400) {
+                        isLoginError.value = true;
+                    }
+                });
+        };
+
+        return { firstName, lastName, isUserLoggedIn, userId, loginUserAsync, login, isLoginError };
     },
     components: {
         Form,
         Field,
         ErrorMessage,
-    },
-    data() {
-        return {
-            login: {
-                email: "",
-                password: "",
-            },
-            user: {},
-            isLoginError: false,
-        };
-    },
-    methods: {
-        async loginUser() {
-            const loginCredentials = {
-                email: this.login.email,
-                password: this.login.password,
-            };
-
-            loginUser(loginCredentials)
-                .then(response => {
-                    if (response.data.token !== null) {
-                        sessionStorage.setItem("jwt", response.data.token);
-                        router.push({ name: "LandingPage" });
-                    }
-                })
-                .catch(error => {
-                    if (error.response.status === 400) {
-                        this.isLoginError = true;
-                    }
-                });
-        },
-    },
-    watch: {
-        login: {
-            deep: true,
-            handler() {
-                this.isLoginError = false;
-            },
-        },
     },
 };
 </script>

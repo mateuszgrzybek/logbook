@@ -11,6 +11,7 @@ const store = createStore({
         isUserLoggedIn: false,
         firstName: "",
         lastName: "",
+        email: "",
         userId: "",
         userEntries: [],
         aircraftTypes: [
@@ -25,6 +26,7 @@ const store = createStore({
         userLogIn(state, payload) {
             state.firstName = payload.firstName;
             state.lastName = payload.lastName;
+            state.email = payload.email;
             state.isUserLoggedIn = true;
             state.userId = payload.userId;
             state.userEntries = payload.userEntries;
@@ -34,6 +36,7 @@ const store = createStore({
             state.isUserLoggedIn = false;
             state.firstName = "";
             state.lastName = "";
+            state.email = "";
             state.userId = "";
             state.userEntries = [];
             state.aircraftTypes = [];
@@ -61,7 +64,7 @@ const store = createStore({
                 aircraftPhoto: payload.aircraftPhoto,
             };
             const matchingIndex = state.aircraftTypes.findIndex(
-                aircraftType =>
+                (aircraftType) =>
                     aircraftType.aircraftICAO === deletedEntryAircraftType.aircraftICAO &&
                     aircraftType.aircraftRegistration === deletedEntryAircraftType.aircraftRegistration
             );
