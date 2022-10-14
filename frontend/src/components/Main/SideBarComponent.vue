@@ -1,5 +1,5 @@
 <template>
-    <VNavigationDrawer expand-on-hover rail>
+    <VNavigationDrawer expand-on-hover rail permanent>
         <VList v-if="isUserLoggedIn">
             <VListItem
                 prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"

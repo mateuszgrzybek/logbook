@@ -1,4 +1,18 @@
-<template></template>
+<template>
+    <div id="slideshow">
+        <VCarousel :show-arrows="false" hide-delimiters cycle continuous height="100vh" style="position: fixed; top: 0; left: 0">
+            <div id="slideshow--overlay"></div>
+            <v-carousel-item
+                v-for="(image, i) in images"
+                :key="i"
+                :src="image.src"
+                reverse-transition="fade-transition"
+                transition="fade-transition"
+                cover
+            ></v-carousel-item>
+        </VCarousel>
+    </div>
+</template>
 
 <script>
 export default {

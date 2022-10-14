@@ -1,7 +1,14 @@
 <template>
-    <div class="text-h2">
-        <template v-if="isUserLoggedIn">Welcome to your personal logbook</template>
-        <template v-else>Welcome to your personal logbook, {{ firstName }}</template>
+    <div class="container">
+        <section class="hero is-fullheight is-justify-content-center">
+            <div class="has-text-white">
+                <template v-if="!isUserLoggedIn">
+                    <div class="is-size-2">Welcome to your personal logbook</div>
+                    <div class="is-size-4">Please log in or register to use the full featureset of the application</div>
+                </template>
+                <template v-else>Welcome to your personal logbook, {{ firstName }}</template>
+            </div>
+        </section>
     </div>
 </template>
 
