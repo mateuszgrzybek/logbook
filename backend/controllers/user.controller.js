@@ -12,7 +12,7 @@ exports.registerNewUser = async (req, res) => {
             logbookEntries: req.body.logbookEntries,
             aircraftTypes: req.body.aircraftTypes,
         });
-        User.findOne({ email: user.email }).then(async response => {
+        User.findOne({ email: user.email }).then(async (response) => {
             if (response) {
                 res.status(409).json({});
             } else {
@@ -47,7 +47,7 @@ exports.addUserEntry = async (req, res) => {
     const userId = req.body.userId;
     const entryId = req.body.entryId;
     User.findByIdAndUpdate(userId, { $addToSet: { logbookEntries: entryId } }, { useFindAndModify: false })
-        .then(data => {
+        .then((data) => {
             if (!data) {
                 res.status(404).json({
                     message: `Cannot update a user with id=${userId}.`,
@@ -56,7 +56,7 @@ exports.addUserEntry = async (req, res) => {
                 res.json("User entries have been updated.");
             }
         })
-        .catch(err => {
+        .catch((err) => {
             res.status(500).json(`Error ${err}`);
         });
 };
@@ -65,7 +65,7 @@ exports.deleteUserEntry = async (req, res) => {
     const userId = req.body.userId;
     const entryId = req.body.entryId;
     User.findByIdAndUpdate(userId, { $pull: { logbookEntries: entryId } }, { useFindAndModify: false })
-        .then(data => {
+        .then((data) => {
             if (!data) {
                 res.status(404).json({
                     message: `Cannot update a user with id=${userId}.`,
@@ -74,7 +74,7 @@ exports.deleteUserEntry = async (req, res) => {
                 res.json("User entries have been updated.");
             }
         })
-        .catch(err => {
+        .catch((err) => {
             res.status(500).json(`Error ${err}`);
         });
 };
@@ -89,7 +89,7 @@ exports.addUserAircraftType = async (req, res) => {
         aircraftPhoto: req.body.aircraftPhoto,
     };
     User.findByIdAndUpdate(userId, { $addToSet: { aircraftTypes: aircraftType } }, { useFindAndModify: false })
-        .then(data => {
+        .then((data) => {
             if (!data) {
                 res.status(404).json({
                     message: `Cannot update a user with id=${userId}.`,
@@ -98,7 +98,7 @@ exports.addUserAircraftType = async (req, res) => {
                 res.json("Aircraft types have been updated.");
             }
         })
-        .catch(err => {
+        .catch((err) => {
             res.status(500).json(`Error ${err}`);
         });
 };
@@ -111,7 +111,7 @@ exports.deleteUserAircraftType = async (req, res) => {
         aircraftPhoto: req.body.aircraftPhoto,
     };
     User.findByIdAndUpdate(userId, { $pull: { aircraftTypes: aircraftType } }, { useFindAndModify: false })
-        .then(data => {
+        .then((data) => {
             if (!data) {
                 res.status(404).json({
                     message: `Cannot update a user with id=${userId}.`,
@@ -120,7 +120,7 @@ exports.deleteUserAircraftType = async (req, res) => {
                 res.json("Aircraft types have been updated.");
             }
         })
-        .catch(err => {
+        .catch((err) => {
             res.status(500).json(`Error ${err}`);
         });
 };

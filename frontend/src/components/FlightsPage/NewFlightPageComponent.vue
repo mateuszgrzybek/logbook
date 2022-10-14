@@ -29,9 +29,7 @@
                     </div>
                     <div class="card is-hidden-tablet mb-5">
                         <header class="card-header">
-                            <p class="card-header-title py-2 pl-3">
-                                Aircraft photo
-                            </p>
+                            <p class="card-header-title py-2 pl-3">Aircraft photo</p>
                             <button type="button" class="card-header-icon p-2" aria-label="more options">
                                 <span class="icon">
                                     <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -165,7 +163,7 @@ export default {
             flightTime: 0,
             aircraftICAO: "",
             aircraftRegistration: "",
-            planeSpottersPhotoSource: require("../../assets/images/placeholder.png"),
+            planeSpottersPhotoSource: new URL("../../assets/images/placeholder.png", import.meta.url).href,
             isMatchingPhoto: false,
         };
     },
@@ -183,7 +181,7 @@ export default {
                 planeSpottersPhotoSource: this.planeSpottersPhotoSource,
             };
 
-            createNewEntry(newEntry).then(response => {
+            createNewEntry(newEntry).then((response) => {
                 const newEntryId = response.data._id;
                 const userId = this.userId;
                 const aircraftICAO = newEntry.aircraftICAO;
@@ -201,12 +199,12 @@ export default {
 
                     if (
                         !this.aircraftTypes.some(
-                            aircraftType =>
+                            (aircraftType) =>
                                 aircraftType.aircraftICAO === payload.aircraftICAO &&
                                 aircraftType.aircraftRegistration === payload.aircraftRegistration
                         )
                     ) {
-                        addUserAicraftType(payload).then(response => {
+                        addUserAicraftType(payload).then((response) => {
                             if (response.status === 200) {
                                 this.addAircraftType(payload);
                             }
@@ -223,7 +221,7 @@ export default {
         },
         getImgUrl() {
             if (this.aircraftRegistration.length > 0) {
-                axios.get(`https://api.planespotters.net/pub/photos/reg/${this.aircraftRegistration}`).then(response => {
+                axios.get(`https://api.planespotters.net/pub/photos/reg/${this.aircraftRegistration}`).then((response) => {
                     const photos = response.data.photos;
                     if (photos.length > 0) {
                         this.planeSpottersPhotoSource = photos.length === 0 ? "" : photos[0].thumbnail_large.src;
@@ -245,14 +243,14 @@ export default {
         },
         setPlaceholderImage() {
             this.isMatchingPhoto = false;
-            this.planeSpottersPhotoSource = require("../../assets/images/placeholder.png");
+            this.planeSpottersPhotoSource = new URL("../../assets/images/placeholder.png", import.meta.url).href;
         },
     },
     watch: {
-        depTimeZulu: function() {
+        depTimeZulu: function () {
             this.updateFlightTime();
         },
-        arrTimeZulu: function() {
+        arrTimeZulu: function () {
             this.updateFlightTime();
         },
     },
